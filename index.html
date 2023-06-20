@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/455214c00f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Portfolio - Timm M. Wirtz</title>
+</head>
+<body>
+
+<div id="progressbar"></div>
+
+<style>
+.hidden {
+    display: none;
+}
+</style>
+
+<script>
+window.onscroll = function() {myFunction()};
+
+function myFunction() {
+  var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+  var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  var scrolled = (winScroll / height) * 100;
+  document.getElementById("progressbar").style.width = (scrolled / 2) + "%";
+}
+</script>
+
+    <div class="section-1">
+        <i class="fa fa-terminal fa-5x white"></i>
+        <h2 class="h2-name">Timm M. Wirtz</h2>
+        <p>Goettingen, Germany.</p>
+        <a href="https://github.com/tmwProjects" class="icon-link" target="_blank">
+            <i class="fab fa-github"></i>
+        </a>
+        <div class="line"></div>
+        <h2>About</h2>
+        <p class="about-text">
+            Welcome! I'm Timm, a passionate programmer and aspiring researcher in the fascinating world of geosciences.
+            From an early age, community games have shaped me, as solving challenges together strengthens my team spirit.
+            In the vein of sharing and collaboration, I am an ardent advocate of open-source projects. I actively engage
+            in the digital community, contributing and learning from shared knowledge to create a better future together.
+            This spirit of openness extends to my intellectual pursuits as well, finding inspiration in the profound
+            exploration of human nature in Hermann Hesse's literature. Like open-source code, I believe his writings
+            foster a broader understanding of the world around us and within us. My passions also include OSINT
+            (Open Source Intelligence) and GEOSINT (Geospatial Intelligence), which allow me to derive valuable insights
+            from publicly accessible information and spatial data analysis. Effective communication, particularly the
+            art of rhetoric, holds immense value for me. In my free time, I find joy in strategic chess games and seek
+            physical challenges and mental balance through bouldering. And then there's my sweet weakness: cake!
+            Particularly, the alluring Bienenstich has captured my heart.
+        </p>
+        <section id="experience" class="hidden">
+        <h2>Experience</h2>
+        <p class="exp-text">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis in maiores autem quidem.Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis in maiores autem quidem.Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis in maiores autem quidem.
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis in maiores autem quidem.Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis in maiores autem quidem.Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis in maiores autem quidem.
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis in maiores autem quidem.Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis in maiores autem quidem.Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis in maiores autem quidem.
+        </p>
+        </section>
+        <h2>Skills</h2>
+        <h3>Technologies</h3>
+        <ul class="skill-list">
+            <li>
+                <i class="fab fa-python skill-icon"></i>
+                <span class="skill-name">Python</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 74%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fab fa-linux skill-icon"></i>
+                <span class="skill-name">Linux</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 70%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fab fa-windows skill-icon"></i>
+                <span class="skill-name">Windows</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 50%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fa fa-terminal skill-icon"></i>
+                <span class="skill-name">Shell</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 70%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fa-brands fa-git skill-icon"></i>
+                <span class="skill-name">Git</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 28%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fa-solid fa-database skill-icon"></i>
+                <span class="skill-name">SQL</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 22%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fab fa-docker skill-icon"></i>
+                <span class="skill-name">Docker</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 15%;"></div>
+                </div>
+            </li>
+        </ul>
+        <h3 class="section-header">Frameworks / Libraries / Tools / Platforms</h3>
+        <div class="grid">
+            <div class="item">
+                <i class="fab fa-github skill-icon"></i>
+                <span class="skill-name">GitHub</span>
+            </div>
+            <div class="item">
+                <i class="fab fa-gitlab skill-icon"></i>
+                <span class="skill-name">GitLab</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-box-open skill-icon"></i>
+                <span class="skill-name">VirtualBox</span>
+            </div>
+            <div class="item">
+                <i class="fa-regular fa-file-excel skill-icon"></i>
+                <span class="skill-name">Calc/Excel</span>
+            </div>
+            <div class="item">
+                <i class="fa-regular fa-file-word skill-icon"></i>
+                <span class="skill-name">Writer/Word</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-p skill-icon"></i>
+                <span class="skill-name">Pandoc</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-book-open skill-icon"></i>
+                <span class="skill-name">Jupyter</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-earth-europe skill-icon"></i>
+                <span class="skill-name">GIS</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-sailboat skill-icon"></i>
+                <span class="skill-name">Streamlit</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-bold skill-icon"></i>
+                <span class="skill-name">Binder</span>
+            </div>
+        </div>
+        <h3 class="section-header">Data Types</h3>
+        <div class="grid">
+            <div class="item">
+                <i class="fa-solid fa-file-csv skill-icon"></i>
+                <span class="skill-name">CSV</span>
+            </div>
+            <div class="item">
+                <i class="fa-regular fa-file-pdf skill-icon"></i>
+                <span class="skill-name">PDF</span>
+            </div>
+            <div class="item">
+                <i class="fa-regular fa-file-code skill-icon"></i>
+                <span class="skill-name">JSON</span>
+            </div>
+        </div>
+        <h3 class="section-header">Markup Languages</h3>
+        <div class="grid">
+            <div class="item">
+                <i class="fab fa-markdown skill-icon"></i>
+                <span class="skill-name">MD</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-superscript skill-icon"></i>
+                <span class="skill-name">LaTeX</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-code skill-icon"></i>
+                <span class="skill-name">HTML</span>
+            </div>
+        </div>
+        <h3 class="section-header">Abilities</h3>
+        <div class="abilities-grid">
+            <div class="item">
+                <i class="fa-solid fa-book skill-icon"></i>
+                <span class="skill-name">Documentation</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-magnifying-glass-arrow-right skill-icon"></i>
+                <span class="skill-name">OSINT/GEOSINT</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-magnifying-glass-chart skill-icon"></i>
+                <span class="skill-name">Data Analysis</span>
+            </div>
+            <div class="item">
+                <i class="fa-regular fa-eye skill-icon"></i>
+                <span class="skill-name">Data Visualization</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-soap skill-icon"></i>
+                <span class="skill-name">Data Cleaning</span>
+            </div>
+        </div>
+        <h2 class="section-header">Projects</h2>
+        <ul class="project-list">
+            <li>
+                <a href="https://github.com/tmwProjects/tmwProjects.github.io" class="project-link" target="_blank">
+                    <div>This portfolio website</div>
+                    <span class="role"> (Owner/Public)</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/tmwProjects/common-geoscience-data-cleaning-methods" class="project-link" target="_blank">
+                    <div>Common methods of data cleaning <br> in Geoscience</div>
+                    <span class="role"> (Owner/Public)</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/tmwProjects/common-methods-of-git" class="project-link" target="_blank">
+                    <div>Common methods of Git</div>
+                    <span class="role"> (Owner/Public)</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/tmwProjects/GeoRoc_CLI" class="project-link" target="_blank">
+                    <div>GeoRoc 2.0 CLI</div>
+                    <span class="role"> (Owner/Public)</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/tmwProjects/Georoc_jupyter" class="project-link" target="_blank">
+                    <div>DIGIS GeoRoc 2.0 API Jupyter Notebook</div>
+                    <span class="role"> (Maintainer/Public)</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="project-link" target="_blank">
+                    <div>GeoChem-NER</div>
+                    <span class="role"> (Owner/privat)</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="project-link" target="_blank">
+                    <div>Open Source Spark Project</div>
+                    <span class="role"> (Contributor/privat)</span>
+                </a>
+            </li>
+        </ul>
+        <h2 class="section-header">Contact</h2>
+        <a href="mailto:tmw.contact@protonmail.com" class="icon-link">
+            <i class="fa-solid fa-envelope"></i>
+        </a>
+        <div id="icon-container">
+            <a href="https://c.tenor.com/DFwPhj-PBzYAAAAd/tenor.gif" id="bottom-left-icon" target="_blank">
+                <i class="fa-solid fa-egg"></i>
+            </a>
+        </div>
+    <script>
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        var scrollPercent = (document.documentElement.scrollTop + document.body.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 100;
+        if (scrollPercent > 96) {
+            document.querySelector("#icon-container").style.display = "block";
+        } else {
+            document.querySelector("#icon-container").style.display = "none";
+        }
+    }
+    </script>
+</body>
