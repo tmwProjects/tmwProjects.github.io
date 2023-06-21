@@ -39,3 +39,14 @@ Happy Coding!
 Hey there! It's really great that you appreciate my work on GitHub! Everything you see here is a product of my voluntary efforts, and I'm all about sharing useful content. If you find value in what I do and would like to support me, you might consider buying me a coffee. Thank you so much for your generosity and support!
 
 ###### Hint: If you would like to buy me a "Coffee", please give a name/pseudonym and the project, I would like to have the possibility to thank you by name. - Thanks :)
+
+***
+
+### License
+
+**MIT License**
+
+The MIT licence is a very permissive licence created by the Massachusetts Institute of Technology. It basically allows 
+you to do almost anything you want with the licensed code - you can modify it, incorporate it into your own software 
+and sell your software if you want. The only condition is that you always retain the MIT licence in your copies of the 
+original or modified code. In other words, you must always recognise that the original code is under the MIT licence.
