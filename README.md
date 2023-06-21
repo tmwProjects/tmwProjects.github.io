@@ -34,7 +34,7 @@ Happy Coding!
 
 ***
 
-### Thanks
+### Acknowledgement
 
 Hey there! It's really great that you appreciate my work on GitHub! Everything you see here is a product of my voluntary efforts, and I'm all about sharing useful content. If you find value in what I do and would like to support me, you might consider buying me a coffee. Thank you so much for your generosity and support!
 
