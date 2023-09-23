@@ -2,7 +2,7 @@
 /* global */
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Inconsolata:wght@500&family=Quattrocento+Sans&display=swap');
 
-#progressbar {
+progressbar {
   position: fixed;
   top: 0;
   right: 0;
@@ -167,8 +167,8 @@ h3 {
 }
 .skill-icon {
     font-size: 25px;
-    margin-right: 10px;
-    color: #fff;
+    margin-right: 15px;
+    color: #fff; !important
 }
 
 .item {
@@ -187,13 +187,13 @@ h3 {
 .skill-list li {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 18px;
     width: 100%;
 }
 
 .skill-list li::before {
     color: #7A7C80;
-    margin-right: 15px;
+    margin-right: 20px;
 }
 
 .skill-list li .skill-icon {
@@ -203,8 +203,8 @@ h3 {
 }
 
 .skill-list li .skill-name {
-    margin-right: 0px;
-    margin-left: 6px;
+    margin-right: 10px;
+    margin-left: 8px;
     width: 80px;
 }
 
