@@ -49,10 +49,15 @@ h2,
     color: #fff;
 }
 
+h2 {
+    margin-top: 70px;
+}
+
 .h2-name {
     font-family: 'Fira+Code';
-    font-size: 2.5rem !important;
+    font-size: 3rem !important;
     white-space: nowrap;
+    margin-top: 30px;
 }
 
 a {
@@ -155,6 +160,7 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin-bottom: 80px;
 }
 
 .abilities-grid {
@@ -167,8 +173,44 @@ h3 {
 }
 .skill-icon {
     font-size: 25px;
-    margin-right: 15px;
+    margin-right: 20px;
     color: #fff; !important
+}
+
+li {
+    margin: 15px 0;
+}
+
+#experience h2 {
+    text-align: center;
+}
+
+#experience ul {
+    list-style: none;
+    padding-left: 0;
+    font-size: 18px;
+}
+
+#experience li {
+    text-align: left;
+    position: relative;
+    padding-left: 1.5em;
+    margin-bottom: 20px
+}
+
+
+#experience li::before {
+    content: "\2022";
+    color: white;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+}
+
+.special-item {
+    display: block;
 }
 
 .item {
@@ -179,9 +221,14 @@ h3 {
   flex-basis: calc(20% - 15px);
 }
 
+.special-item {
+    display: block !important;
+}
+
 .skill-list {
     list-style-type: none;
     padding: 0;
+    margin-bottom: 80px;
 }
 
 .skill-list li {
@@ -203,8 +250,8 @@ h3 {
 }
 
 .skill-list li .skill-name {
-    margin-right: 10px;
-    margin-left: 8px;
+    margin-right: 20px;
+    margin-left: 12px;
     width: 80px;
 }
 
