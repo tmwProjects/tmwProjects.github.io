@@ -1,5 +1,3 @@
-/* CSS-Stile für das Dokument */
-/* global */
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Inconsolata:wght@500&family=Quattrocento+Sans&display=swap');
 
 progressbar {
@@ -14,7 +12,7 @@ progressbar {
 }
 
 body {
-    font-family: 'Quattrocento+Sans';
+    font-family: 'Source Code Pro', monospace;
     margin: 0;
     padding: 0;
     padding-bottom: 10vh;
@@ -54,7 +52,7 @@ h2 {
 }
 
 .h2-name {
-    font-family: 'Fira+Code';
+    font-family: 'Source Code Pro', monospace;
     font-size: 3rem !important;
     white-space: nowrap;
     margin-top: 30px;
@@ -71,7 +69,7 @@ a {
 }
 
 h3 {
-    font-family: 'Quattrocento+Sans';
+    font-family: 'Source Code Pro', monospace;
     margin-bottom: 30px;
 }
 
@@ -87,7 +85,7 @@ h3 {
 }
 
 .project-link:hover {
-    font-family: 'Quattrocento+Sans';
+    font-family: 'Source Code Pro', monospace;
     color: #fff !important;
     font-size: 21px !important;
 }
