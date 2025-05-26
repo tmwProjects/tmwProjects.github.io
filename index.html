@@ -351,6 +351,13 @@ function myFunction() {
         </div>
 
     <script>
+    function myFunction() {
+        var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        var scrolled = (winScroll / height) * 100;
+        document.getElementById("progressbar").style.width = (scrolled / 2) + "%";
+    }
+
     function scrollFunction() {
         var scrollPercent = (document.documentElement.scrollTop + document.body.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 100;
         if (scrollPercent > 96) {
@@ -368,7 +375,7 @@ function myFunction() {
         section.style.opacity = opacity;
     }
 
-    window.addEventListener('scroll', scrollFunction);
-    window.addEventListener('scroll', fadeSection);
-    </script>
-</body>
+window.addEventListener('scroll', myFunction);
+window.addEventListener('scroll', scrollFunction);
+window.addEventListener('scroll', fadeSection);
+</script>
