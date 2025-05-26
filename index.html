@@ -351,8 +351,6 @@ function myFunction() {
         </div>
 
     <script>
-    window.onscroll = function() {scrollFunction()};
-
     function scrollFunction() {
         var scrollPercent = (document.documentElement.scrollTop + document.body.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 100;
         if (scrollPercent > 96) {
@@ -361,5 +359,16 @@ function myFunction() {
             document.querySelector("#icon-container").style.display = "none";
         }
     }
+
+    function fadeSection() {
+        const section = document.querySelector('.section-1');
+        let scrollY = window.scrollY || document.documentElement.scrollTop;
+        let opacity = 1 - scrollY / 200;
+        opacity = Math.min(Math.max(opacity, 0), 1);
+        section.style.opacity = opacity;
+    }
+
+    window.addEventListener('scroll', scrollFunction);
+    window.addEventListener('scroll', fadeSection);
     </script>
 </body>
