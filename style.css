@@ -299,3 +299,16 @@ li {
         box-sizing: border-box;
     }
 }
+
+.certificate-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.certificate-item {
+  flex: 1 1 370px;
+  display: flex;
+  justify-content: center;
+}
