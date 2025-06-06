@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>hugo_hackside</title>
+</head>
+<body>
+<h1 id="create-and-deploy-a-blog-with-hugo">Create and deploy a Blog
+with Hugo</h1>
+<p>I’m excited to share with you how I created HackSide with the help of
+Hugo. My adventure began on a rainy day when I decided to turn my ideas
+and technical skills into a unique digital project.</p>
+<p>My journey was a fascinating mix of creativity and technical
+challenge. I came across Hugo and was immediately impressed by its
+simplicity and efficiency. It was like discovering a new tool that was
+tailored to my exact needs. The beauty of Hugo is that it is written in
+Go, a language known for its speed and power. This made the whole
+process not only faster, but also more enjoyable.</p>
+<p>In this post, I’ll take you on a little journey through the steps I
+took to create HackSide. From the first installation of Hugo to the
+initialization of the HackSide project to the final configuration.
+You’ll see how I used commands in Bash, how I managed my repository on
+GitHub and how I finally brought my content to life with Hugo.</p>
+<p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-6B783D"
+alt="License" /></a></p>
+<hr />
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#installation-and-setup">Installation and setup</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#create-posts-and-build-site">Create posts and build
+site</a></li>
+<li><a href="#deployment">Deployment</a></li>
+<li><a href="#references">References</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<hr />
+<h3 id="installation-and-setup">Installation and setup</h3>
+<p>With the following command I download and install Hugo on your Linux
+system - it’s like opening a door to a room full of creative
+possibilities for web projects.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install hugo</span></code></pre></div>
+<p>This command lays the foundation for the “HackSide” project. It is
+the first step in bringing the website ideas into a structured form.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hugo</span> new site Blog</span></code></pre></div>
+<p>Now we switch to the newly created HackSide directory to work on the
+development of our website.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Blog</span></code></pre></div>
+<p>Here we initialize a git repository in our project directory. This
+allows us to effectively track all changes to the project.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span></code></pre></div>
+<p>This command connects our Hugo project to a module on GitHub, giving
+us additional management options and a clear project structure.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hugo</span> mod init github.com/tmwProjects/Blog</span></code></pre></div>
+<p>Here we add an external Hugo module, the “Risotto” theme, to our
+project. This gives our website a specific design and layout.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hugo</span> mod get github.com/serkodev/holy</span></code></pre></div>
+<p>With this command, we enter the configuration for our selected theme
+in the Hugo configuration file to determine the appearance of our
+website.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;theme = &#39;github.com/serkodev/holy&#39;&quot;</span> <span class="op">&gt;&gt;</span> hugo.toml</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h3 id="configuration">Configuration</h3>
+<p>Now we create and edit the configuration files for our GitHub
+workflows to ensure seamless integration and automation. There is a
+direct configuration in the Hugo documentation, which only needs to be
+copied into the file.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> .github/workflows</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> .github/workflows</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;# Sample workflow for building and deploying a Hugo site to GitHub Pages</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="st">name: Deploy Hugo site to Pages</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">on:</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="st">  # Runs on pushes targeting the default branch</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="st">  push:</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="st">    branches:</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="st">      - main</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="st">  # Allows you to run this workflow manually from the Actions tab</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="st">  workflow_dispatch:</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="st"># Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="st">permissions:</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="st">  contents: read</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="st">  pages: write</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="st">  id-token: write</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="st"># Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="st"># However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="st">concurrency:</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="st">  group: &quot;</span>pages<span class="st">&quot;</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="st">  cancel-in-progress: false</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="st"># Default to bash</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="st">defaults:</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="st">  run:</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="st">    shell: bash</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="st">jobs:</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="st">  # Build job</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="st">  build:</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="st">    runs-on: ubuntu-latest</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="st">    env:</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="st">      HUGO_VERSION: 0.121.0</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="st">    steps:</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="st">      - name: Install Hugo CLI</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="st">        run: |</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="st">          wget -O </span><span class="va">${</span><span class="er">{ runner.temp </span><span class="va">}</span><span class="st">}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v</span><span class="va">${HUGO_VERSION}</span><span class="st">/hugo_extended_</span><span class="va">${HUGO_VERSION}</span><span class="st">_linux-amd64.deb </span><span class="dt">\</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="st">          &amp;&amp; sudo dpkg -i </span><span class="va">${</span><span class="er">{ runner.temp </span><span class="va">}</span><span class="st">}/hugo.deb          </span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="st">      - name: Install Dart Sass</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="st">        run: sudo snap install dart-sass</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="st">      - name: Checkout</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="st">        uses: actions/checkout@v4</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="st">        with:</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="st">          submodules: recursive</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="st">          fetch-depth: 0</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="st">      - name: Setup Pages</span></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="st">        id: pages</span></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="st">        uses: actions/configure-pages@v4</span></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="st">      - name: Install Node.js dependencies</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a><span class="st">        run: &quot;</span>[[ <span class="at">-f</span> package-lock.json <span class="kw">||</span> <span class="ex">-f</span> npm-shrinkwrap.json ]] <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> ci <span class="kw">||</span> <span class="ex">true</span><span class="st">&quot;</span></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="st">      - name: Build with Hugo</span></span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a><span class="st">        env:</span></span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a><span class="st">          # For maximum backward compatibility with Hugo modules</span></span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a><span class="st">          HUGO_ENVIRONMENT: production</span></span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="st">          HUGO_ENV: production</span></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a><span class="st">        run: |</span></span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a><span class="st">          hugo </span><span class="dt">\</span></span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="st">            --gc </span><span class="dt">\</span></span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="st">            --minify </span><span class="dt">\</span></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="st">            --baseURL &quot;</span><span class="va">${</span><span class="er">{ steps.pages.outputs.base_url </span><span class="va">}</span><span class="ex">}/</span><span class="st">&quot;          </span></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="st">      - name: Upload artifact</span></span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="st">        uses: actions/upload-pages-artifact@v2</span></span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a><span class="st">        with:</span></span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="st">          path: ./public</span></span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="st">  # Deployment job</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a><span class="st">  deploy:</span></span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="st">    environment:</span></span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a><span class="st">      name: github-pages</span></span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a><span class="st">      url: </span><span class="va">${</span><span class="er">{ steps.deployment.outputs.page_url </span><span class="va">}</span><span class="st">}</span></span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a><span class="st">    runs-on: ubuntu-latest</span></span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a><span class="st">    needs: build</span></span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a><span class="st">    steps:</span></span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a><span class="st">      - name: Deploy to GitHub Pages</span></span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a><span class="st">        id: deployment</span></span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a><span class="st">        uses: actions/deploy-pages@v3&quot;</span> <span class="op">&gt;&gt;</span> hugo.yaml</span></code></pre></div>
+<p>This command adds the .hugo_build.lock file to our .gitignore so that
+it is not included in our repository.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&#39;.hugo_build.lock&#39;</span> <span class="op">&gt;&gt;</span> .gitignore</span></code></pre></div>
+<p>This is where we create our first post for our website, which marks
+the beginning of our content production.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h3 id="create-posts-and-build-site">Create posts and build site</h3>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hugo</span> new content posts/my-first-post.md</span></code></pre></div>
+<p>We start our local Hugo server to preview our website and check
+changes in real time.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hugo</span> server</span></code></pre></div>
+<p>These commands allow us to view drafts of our website so we can work
+on unfinished content.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hugo</span> server <span class="at">--buildDrafts</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hugo</span> server <span class="at">-D</span></span></code></pre></div>
+<p>This command gives us detailed information about the build process of
+our website and helps us identify any issues.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hugo</span> <span class="at">-v</span> <span class="at">--debug</span> <span class="at">-D</span></span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h3 id="deployment">Deployment</h3>
+<p>This command sequence is essential for our work with Git. We check
+the status, add changes, save them with a commit and upload everything
+to GitHub.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&#39;Initial commit&#39;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div>
+<p>Finally, the source had to be set to “GitHub Actions” for “Building
+and Deployment” on Github and only the workflow “Deploy Hugo site to
+Pages” had to be started for actions in the repository. Within a few
+seconds, the process was complete and the raw version of HackSide was
+online. The specific documentation can be found <a
+href="https://gohugo.io/hosting-and-deployment/hosting-on-github/">here</a>.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h2 id="references">References</h2>
+<p>[1] <strong>Git</strong> - Chacon, S., Straub, B., et al. (2023).
+“Git Documentation: A Comprehensive Guide for Version Control.” Git
+Community. https://git-scm.com/doc</p>
+<p>[2] <strong>GitHub</strong> - GitHub, Inc. (2023). “GitHub: A
+Platform for Version Control and Collaboration.” GitHub.</p>
+<p>[3] <strong>Mike F. Robbins</strong> - Building and Deploying a Blog
+with Hugo and GitHub Pages (26.10.2023).
+https://mikefrobbins.com/2023/10/26/building-and-deploying-a-blog-with-hugo-and-github-pages/</p>
+<p>[4] <strong>Hugo</strong> - Hugo is a fast and modern static site
+generator written in Go, and designed to make website creation fun
+again. (2023) https://gohugo.io/</p>
+<p>[5] <strong>Hugo Documentation</strong> -
+https://gohugo.io/documentation/</p>
+<p>[6] <strong>Risotto</strong> - A minimalist, responsive theme
+inspired by terminal ricing aesthetics.
+https://themes.gohugo.io/themes/risotto/</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="license">License</h3>
+<p><strong>CC BY-NC-SA 4.0 Licence</strong></p>
+<p>With this licence, you may use, modify and share the work as long as
+you credit the original author. However, you may not use it for
+commercial purposes, i.e. you may not make money from it. And if you
+make changes and share the new work, it must be shared under the same
+conditions.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+</body>
+</html>

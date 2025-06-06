@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>data_cleaning</title>
+</head>
+<body>
+<h1 id="common-data-cleaning-methods">Common Data Cleaning methods</h1>
+<p>Data cleaning is a crucial process in many fields to ensure accurate
+and reliable analysis results. Python offers a powerful toolset for this
+purpose, providing scalability, automation, and adaptability. With
+libraries such as Pandas, NumPy, and Matplotlib, professionals across
+various disciplines can efficiently clean, organize, and analyze their
+data. To effectively use Python for data cleaning, it is essential to
+grasp basic programming concepts and become familiar with these relevant
+libraries, while adhering to best practices. By utilizing Python,
+researchers and analysts can enhance the effectiveness and efficiency of
+their work, leading to meaningful and insightful outcomes.</p>
+<p>This project is only intended to provide some overview of what common
+techniques and workflows might occur. It is important to note that each
+data set is a new challenge and one should not be tempted to run a
+quickly assembled script over a data set. Especially in a scientific
+context, a lot of analysis and planning is required. Writing code,
+running it, and possibly having a matching dataset is only a small
+part.</p>
+<p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-6B783D"
+alt="License" /></a></p>
+<hr />
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#python-vs-excel-and-co">Python vs. Excel and co.</a></li>
+<li><a href="#workflow">Workflow</a></li>
+<li><a href="#data-quality---defining-requirements-for-data">Data
+Quality - Defining Requirements for Data</a></li>
+<li><a href="#analysis-of-the-data">Analysis of the data</a>
+<ul>
+<li><a href="#loading-the-data-set">Loading the data set</a></li>
+<li><a href="#missing-data">Missing data</a>
+<ul>
+<li><a href="#technique-1-missing-data-heatmap">Technique 1: Missing
+data heatmap</a></li>
+<li><a href="#technique-2-percentage-list-of-missing-data">Technique 2:
+Percentage list of missing data</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#create-a-backup-copy-of-the-filetable">Create a backup
+copy of the file/table</a></li>
+<li><a href="#data-standardization">Data standardization</a></li>
+<li><a href="#data-types---technical-level">Data Types - Technical
+level</a>
+<ul>
+<li><a href="#data-type-1-inconsistent-data">Data type 1: Inconsistent
+data</a></li>
+<li><a href="#data-type-2-irregular-data-outliers">Data type 2:
+Irregular data (outliers)</a>
+<ul>
+<li><a href="#boxplot-of-observations">Boxplot of observations</a></li>
+<li><a href="#histogram-of-observations">Histogram of
+observations</a></li>
+<li><a href="#descriptive-statistics">Descriptive statistics</a></li>
+<li><a href="#lof---local-outlier-factors">LOF - Local Outlier
+Factors</a></li>
+<li><a href="#isolation-forest">Isolation Forest</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#data-types---meaning-level">Data Types - Meaning level</a>
+<ul>
+<li><a href="#type-1-non-informativerepetitive">Type 1:
+Non-informative/repetitive</a></li>
+<li><a href="#type-2-irrelevant-data-type">Type 2: Irrelevant data
+type</a></li>
+<li><a href="#type-3-duplicates">Type 3: Duplicates</a>
+<ul>
+<li><a href="#duplicate-type-1">Duplicate Type 1</a></li>
+<li><a href="#duplicate-type-2">Duplicate Type 2</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#scaling-transformation-and-normalization">Scaling,
+transformation and normalization</a></li>
+<li><a href="#cleaning-the-data">Cleaning the data</a>
+<ul>
+<li><a href="#missing-values">Missing values</a></li>
+</ul></li>
+<li><a href="#verification">Verification</a></li>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#references">References</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<hr />
+<h2 id="python-vs.-excel-and-co.">Python vs. Excel and co.</h2>
+<p>Python offers advantages over Excel and GUI-based tools in the data
+cleaning space, including automation, scalability, flexibility,
+integration, repeatability, traceability, version control, and improved
+error handling. This makes Python particularly suitable for large,
+complex data sets and demanding tasks. Some disadvantages of Python
+compared to GUI-based tools include a steeper learning curve, greater
+time investment, lack of visual tools, lack of immediate feedback, more
+complicated installation and configuration, and less suitability for
+small or simple data sets. These drawbacks stem mainly from the
+programming expertise required and the additional effort required for
+scripting and execution. However, Python remains a powerful and flexible
+option for data cleaning for larger, more complex data sets and advanced
+requirements.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="workflow">Workflow</h3>
+<ol type="1">
+<li>Data quality (define requirements for data). ↓</li>
+<li>Analysis of data (appraisal of raw data).
+<ol type="1">
+<li>Loading of the data set</li>
+<li>Missing data
+<ol type="1">
+<li>Create heat map</li>
+<li>Percentage list of missing data. ↓</li>
+</ol></li>
+</ol></li>
+<li>Create backup copy of file/table. ↓</li>
+<li>Data standardization
+<ol type="1">
+<li>Uniform units of measurement</li>
+<li>Coordinate systems</li>
+<li>Consistent sample designations</li>
+<li>Standardization of analytical methods</li>
+<li>Quality control and assurance</li>
+<li>Inconsistent data</li>
+<li>Irregular data (outliers)</li>
+<li>Unnecessary data
+<ol type="1">
+<li>Not informative/repetitive</li>
+<li>Irrelevant data type</li>
+<li>Duplicates ↓</li>
+</ol></li>
+</ol></li>
+<li>Scaling, transformation and normalization ↓</li>
+<li>Verification ↓</li>
+<li>Formatting ↓</li>
+<li>Documentation</li>
+</ol>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="data-quality---defining-requirements-for-data">Data Quality -
+Defining Requirements for Data</h3>
+<p>When analyzing data, five data quality criteria can be applied to
+quantify the data’s quality. These criteria include completeness,
+uniqueness, accuracy and correctness, consistency and uniformity, and
+freedom from redundancy. Depending on the specific research interest and
+applicability, a selection is made from these criteria, starting with
+the initial definition of the most obvious criteria. Over time,
+additional criteria may be added in an iterative process. Therefore,
+measuring and evaluating data quality and deriving targeted improvement
+measures requires a definition of appropriate data quality criteria in
+advance.</p>
+<ol type="1">
+<li><p><strong>Completeness</strong>: This involves identifying missing
+data and deciding how to handle it - for instance, through imputation,
+exclusion of incomplete data, or acceptance of the
+incompleteness.</p></li>
+<li><p><strong>Uniqueness</strong>: Duplicate entries should be
+identified and removed at this stage.</p></li>
+<li><p><strong>Accuracy and Correctness</strong>: Data cleaning may also
+involve correcting obvious errors, such as implausible values or
+obviously incorrectly assigned categories.</p></li>
+<li><p><strong>Consistency and Uniformity</strong>: It’s important to
+clean up inconsistencies and ensure the data is in a consistent format.
+This may include converting units of measurement or standardizing text
+entries.</p></li>
+<li><p><strong>Freedom from Redundancy</strong>: This step also
+addresses redundancy by removing duplicate or redundant data.</p></li>
+</ol>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h2 id="analysis-of-the-data">Analysis of the data</h2>
+<p>Review of the raw data - checklist</p>
+<ol type="1">
+<li><p><strong>Data Integrity</strong>: Check for completeness,
+correctness, and formatting of data. This includes identifying missing
+or erroneous data and issues with data formatting.</p></li>
+<li><p><strong>Data Consistency and Duplicates</strong>: Ensure data
+across all columns and rows are consistent and free from
+duplicates.</p></li>
+<li><p><strong>Outlier and Missing Value Analysis</strong>: Assess
+whether outliers provide relevant information or indicate errors.
+Develop strategies for handling missing values.</p></li>
+<li><p><strong>Measurement and Analytical Accuracy</strong>: Review the
+precision and accuracy of the analytical methods used, including
+compliance with analytical detection limits.</p></li>
+<li><p><strong>Variability and Pattern Analysis</strong>: Investigate
+seasonal, periodic, or systematic variations, as well as patterns and
+trends in the data.</p></li>
+<li><p><strong>Correlation and Contextual Analysis</strong>: Examine
+correlations between variables and analyze data in the context of a
+specific area of study.</p></li>
+<li><p><strong>Readiness for Statistical Analyses</strong>: Confirm that
+the data are sufficient and appropriate for the intended statistical
+analyses, and outline necessary steps for data preparation.</p></li>
+</ol>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="loading-the-data-set">Loading the data set</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># adjust display options to show all columns  </span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&quot;display.max_columns&quot;</span>, <span class="va">None</span>)  </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&quot;path/to/Data.csv&quot;</span>)  </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data.head(<span class="dv">10</span>),<span class="st">&quot;</span><span class="ch">\n\n</span><span class="st">&quot;</span>, data.dtypes)</span></code></pre></div>
+<p>If the dataset is not displayed correctly due to incorrect column
+names, the skiprows parameter should be used:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>, skiprows<span class="op">=</span><span class="dv">2</span>)  </span></code></pre></div>
+<p>If necessary, the usecols parameter can be used to remove additional
+columns.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h3 id="missing-data">Missing data</h3>
+<h4 id="technique-1-missing-data-heatmap">Technique 1: Missing data
+heatmap</h4>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> missingno <span class="im">as</span> msno</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&quot;path/to/Data.csv&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> msno.nullity_sort(data)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>msno.matrix(data)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<figure>
+<img
+src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/missingno.png?raw=true"
+alt="Heatmap" />
+<figcaption aria-hidden="true">Heatmap</figcaption>
+</figure>
+<p>To get an overview of the completeness of the data, it can still be
+sorted by the zero values.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> missingno <span class="im">as</span> msno</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&quot;path/to/Data.csv&quot;</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>data_sorted_rows <span class="op">=</span> data.loc[data.isnull().<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).sort_values(ascending<span class="op">=</span><span class="va">True</span>).index]</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>data_sorted_rows <span class="op">=</span> data_sorted_rows.reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>null_counts <span class="op">=</span> data_sorted_rows.isnull().<span class="bu">sum</span>()</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>sorted_columns <span class="op">=</span> null_counts.sort_values(ascending<span class="op">=</span><span class="va">True</span>).index</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>data_sorted_rows <span class="op">=</span> data_sorted_rows[sorted_columns]</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>msno.matrix(data_sorted_rows)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<figure>
+<img
+src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/missingno_sorted.png?raw=true"
+alt="Sorted heatmap" />
+<figcaption aria-hidden="true">Sorted heatmap</figcaption>
+</figure>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h4 id="technique-2-percentage-list-of-missing-data">Technique 2:
+Percentage list of missing data</h4>
+<p>Create a list with the percentages of missing values.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate through each column in cols</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> cols:</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the percentage of missing values in the column</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    missing_value_pct <span class="op">=</span> np.mean(data[column].isnull())</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print column name and percentage of missing values</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&#39;Column: </span><span class="sc">{}</span><span class="st">, Missing Values: </span><span class="sc">{:.2f}</span><span class="st">%&#39;</span>.<span class="bu">format</span>(column, missing_value_pct <span class="op">*</span> <span class="dv">100</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Output:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Column:</span> SampleID, Missing Values: 0.00%</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Column:</span> AL2O3, Missing Values: 56.00%</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Column:</span> BA, Missing Values: 56.00%</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Column:</span> CAO, Missing Values: 59.00%</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Column:</span> CE, Missing Values: 56.00%</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Column:</span> Longitude, Missing Values: 0%</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Column:</span> Latitude, Missing Values: 0%</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Column:</span> Units, Missing Values: 26%</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Column:</span> Item_Group, Missing Values: 0%</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h3 id="create-a-backup-copy-of-the-filetable">Create a backup copy of
+the file/table</h3>
+<p>Before performing data cleansing, it is advisable to create a copy of
+the original and erroneous data to ensure the traceability of the
+cleansing and to guarantee an audit-proof procedure. Simply deleting the
+original data after the cleanup is not recommended, as this would make
+it impossible to verify possible sources of error. An alternative
+method, especially in the case of multiple cleanup runs, is to store the
+corrected value in an additional column or row. If there are a large
+number of columns and rows to be corrected, it may also make sense to
+create a separate table. The decision which method to choose depends on
+various factors, including the available storage space.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h3 id="data-standardization">Data standardization</h3>
+<h4 id="some-examples">Some examples</h4>
+<p><strong>Uniform Units of Measurement</strong>:</p>
+<p>Ensure that all data are in the same units of measurement (e.g., ppm,
+ppb, mg/kg, etc.). This may require conversion of units to provide a
+consistent basis for comparison.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert mg/kg to ppm (1 mg/kg = 1 ppm)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&#39;Element_in_mg/kg&#39;</span>] <span class="op">=</span> data[<span class="st">&#39;Element_in_mg/kg&#39;</span>] <span class="op">*</span> <span class="dv">1</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>data.rename(columns<span class="op">=</span>{<span class="st">&#39;Element_in_mg/kg&#39;</span>: <span class="st">&#39;Element_in_ppm&#39;</span>}, inplace<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<p><br></p>
+<p><strong>Coordinate Systems</strong>:</p>
+<p>Geochemical data are often tied to geographic locations, so it is
+important to use a uniform coordinate system (e.g., WGS84, UTM, etc.).
+This may require the conversion of coordinates between different
+systems.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyproj</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Coordinate system</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>in_proj <span class="op">=</span> pyproj.Proj(proj<span class="op">=</span><span class="st">&#39;utm&#39;</span>, zone<span class="op">=</span><span class="dv">33</span>, ellps<span class="op">=</span><span class="st">&#39;WGS84&#39;</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>out_proj <span class="op">=</span> pyproj.Proj(proj<span class="op">=</span><span class="st">&#39;latlong&#39;</span>, datum<span class="op">=</span><span class="st">&#39;WGS84&#39;</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert your coordinates</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&#39;Longitude&#39;</span>], data[<span class="st">&#39;Latitude&#39;</span>] <span class="op">=</span> pyproj.transform(in_proj, out_proj, data[<span class="st">&#39;X&#39;</span>].values, data[<span class="st">&#39;Y&#39;</span>].values)</span></code></pre></div>
+<p><br></p>
+<p><strong>Consistent Sample Identifiers</strong>:</p>
+<p>Ensure that all samples are labeled with consistent names to avoid
+confusion and potential errors in data analysis. This may include
+replacing abbreviations or standardizing naming schemes.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace abbreviations in the &quot;Item_Group&quot; column</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&#39;Item_Group&#39;</span>] <span class="op">=</span> data[<span class="st">&#39;Item_Group&#39;</span>].replace({<span class="st">&#39;mj&#39;</span>: <span class="st">&#39;Major&#39;</span>, <span class="st">&#39;ree&#39;</span>: <span class="st">&#39;Rare Earth Elements&#39;</span>, <span class="st">&#39;te&#39;</span>: <span class="st">&#39;Trace Elements&#39;</span>})</span></code></pre></div>
+<p><br></p>
+<p><strong>Unification of analytical methods</strong>:</p>
+<p>Geochemical data can be obtained by a variety of analytical methods.
+To ensure comparability, it is helpful to standardize the data based on
+a common analytical method or at least to clearly document the methods
+used.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Document the analysis method for each column</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>analysis_methods <span class="op">=</span> {</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;AL2O3&#39;</span>: <span class="st">&#39;XRF&#39;</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;BA&#39;</span>: <span class="st">&#39;ICP-MS&#39;</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ...</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&#39;Analysis_Method&#39;</span>] <span class="op">=</span> data.columns.<span class="bu">map</span>(analysis_methods)</span></code></pre></div>
+<p><br></p>
+<p><strong>Unification of detection limits</strong>:</p>
+<p>Different analyses have different detection limits. To make the data
+more comparable, it may be useful to mark all values below a certain
+detection limit as “undetectable” or “below detection limit”.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Set values below the detection limit to &quot;not detectable&quot;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>detection_limit <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>data[data <span class="op">&lt;</span> detection_limit] <span class="op">=</span> <span class="st">&#39;not detectable&#39;</span></span></code></pre></div>
+<p><br></p>
+<p><strong>Quality Control and Assurance</strong>:</p>
+<p>Establishing standard procedures for quality control and assurance
+can help improve the accuracy and reliability of data. This includes
+reviewing sampling, analytical procedures, and data entry.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if all necessary columns are present</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>required_columns <span class="op">=</span> [<span class="st">&#39;SampleID&#39;</span>, <span class="st">&#39;AL2O3&#39;</span>, <span class="st">&#39;BA&#39;</span>, <span class="st">&#39;Longitude&#39;</span>, <span class="st">&#39;Latitude&#39;</span>]</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>missing_columns <span class="op">=</span> <span class="bu">set</span>(required_columns) <span class="op">-</span> <span class="bu">set</span>(data.columns)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> missing_columns:</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&#39;Missing columns: </span><span class="sc">{</span>missing_columns<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for duplicates in the &quot;SampleID&quot; column</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>duplicate_sample_ids <span class="op">=</span> data[data.duplicated(subset<span class="op">=</span><span class="st">&#39;SampleID&#39;</span>, keep<span class="op">=</span><span class="va">False</span>)]</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> duplicate_sample_ids.empty:</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&#39;Duplicate in SampleID: </span><span class="sc">{</span>duplicate_sample_ids[<span class="st">&quot;SampleID&quot;</span>]<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">&#39;</span>)</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="data-types---technical-level">Data Types - Technical level</h3>
+<h4 id="data-type-1-inconsistent-data">Data type 1: Inconsistent
+data</h4>
+<p>There may be additional strings concatenated to some numeric values
+that we need to remove. For this we define a function that removes these
+specific strings:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remove_string(x):  </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">type</span>(x) <span class="kw">is</span> <span class="bu">str</span>:  </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x.replace(<span class="st">&#39;string&#39;</span>, <span class="st">&#39;&#39;</span>)  </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:  </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span></code></pre></div>
+<p>Here ‘string’ can be removed in the replace function with the desired
+string.</p>
+<p><br></p>
+<p>Depending on the dataset it can be very helpful to get the datatypes
+of each column:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;/path/to/csv&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df.dtypes</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">output:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">SampleID</span> int64</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">AL2O3</span> float64</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ex">BA</span> float64</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="ex">CAO</span> float64</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="ex">CE</span> float64</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="ex">CO</span> float64</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="ex">CR</span> float64</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="ex">CR2O3</span> float64</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="ex">CS</span> float64</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="ex">DY</span> float64</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="ex">ER</span> float64</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="ex">EU</span> float64</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span></code></pre></div>
+<p><br></p>
+<p>Certain values in the columns may be defined as objects, although we
+need numeric ones. For this we can redefine them:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;LA&quot;</span>] <span class="op">=</span> pd.to_numeric(df[<span class="st">&quot;LA&quot;</span>])  </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;NA2O&quot;</span>] <span class="op">=</span> pd.to_numeric(df[<span class="st">&quot;NA2O&quot;</span>])  </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>df.dtypes</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Output:</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">SampleID</span> int64</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">AL2O3</span> float64</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">BA</span> float64</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="ex">CAO</span> float64</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="ex">CE</span> float64</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="ex">CO</span> float64</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="ex">CR</span> float64</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="ex">CR2O3</span> float64</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="ex">CS</span> float64</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="ex">DY</span> float64</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="ex">ER</span> float64</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="ex">EU</span> float64</span></code></pre></div>
+<p><br></p>
+<p>The same applies to column names or categorical values, here you
+often have to pay attention to upper and lower case.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make everything lower case.</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;author_lower&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;LA&#39;</span>].<span class="bu">str</span>.lower()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;author_lower&#39;</span>].value_counts(dropna<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
+<p>For example, all author names are all lowercase, in case it is
+necessary for the upcoming analysis method.</p>
+<p>A common hurdle with processing the data is that some or all of the
+features are not recognized. This occurs when you have columns with
+strings. Here, it can happen that one or more spaces are placed before
+or after that of the string. These should be removed:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># getting all the columns with string/mixed type values</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>str_cols <span class="op">=</span> <span class="bu">list</span>(df.columns)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>str_cols.remove(<span class="st">&#39;MNO&#39;</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># removing leading and trailing characters from columns with str type</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> str_cols:</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    df[i] <span class="op">=</span> df[i].<span class="bu">str</span>.strip()</span></code></pre></div>
+<p>In the context of the Tidy Data structure it becomes indispensable to
+pay attention to these hurdles.</p>
+<p>Before you want to set out to remove missing values or possibly even
+use complex methods to fill them in, take a closer look at the data set.
+You may be able to extract missing values based on valid information
+from the dataset.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h4 id="data-type-2-irregular-data-outliers">Data type 2: Irregular data
+(outliers)</h4>
+<p>If the values are numeric, we can use a histogram and boxplot to
+detect outliers. The disadvantage of boxplots can be that numerical
+outliers can be very pronounced and that this is not correctly
+represented in the boxplot. However, the advantage of boxplots is that
+you can quickly visually see if the values are normally distributed.</p>
+<h5 id="boxplot-of-observations">Boxplot of observations</h5>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># read in data  </span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;restructed_data.csv&quot;</span>)  </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># draw boxplot and get quartiles  </span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()  </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>ax.boxplot(df[<span class="st">&#39;MNO&#39;</span>])  </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co"># identify outliers  </span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>q1 <span class="op">=</span> df[<span class="st">&#39;MNO&#39;</span>].quantile(<span class="fl">0.25</span>)  </span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>q3 <span class="op">=</span> df[<span class="st">&#39;MNO&#39;</span>].quantile(<span class="fl">0.75</span>)  </span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>iqr <span class="op">=</span> q3 <span class="op">-</span> q1  </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>lower_bound <span class="op">=</span> q1 <span class="op">-</span> <span class="fl">1.5</span> <span class="op">*</span> iqr  </span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>upper_bound <span class="op">=</span> q3 <span class="op">+</span> <span class="fl">1.5</span> <span class="op">*</span> iqr  </span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>outliers_indices <span class="op">=</span> [i <span class="cf">for</span> i, value <span class="kw">in</span> <span class="bu">enumerate</span>(df[<span class="st">&#39;MNO&#39;</span>]) <span class="cf">if</span> value <span class="op">&lt;</span> lower_bound <span class="kw">or</span> value <span class="op">&gt;</span> upper_bound]  </span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>outliers_y <span class="op">=</span> [value <span class="cf">for</span> value <span class="kw">in</span> df[<span class="st">&#39;MNO&#39;</span>] <span class="cf">if</span> value <span class="op">&lt;</span> lower_bound <span class="kw">or</span> value <span class="op">&gt;</span> upper_bound]  </span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co"># find sampleIDs of outliers  </span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>outliers_sample_ids <span class="op">=</span> df.iloc[outliers_indices][<span class="st">&#39;SampleID&#39;</span>].tolist()  </span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co"># add SampleIDs as text to the boxplot  </span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, outlier, sample_id <span class="kw">in</span> <span class="bu">zip</span>(outliers_indices, outliers_y, outliers_sample_ids):  </span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>    ax.annotate(<span class="bu">str</span>(sample_id), (<span class="dv">1</span>, outlier), textcoords<span class="op">=</span><span class="st">&quot;offset points&quot;</span>, xytext<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">3</span>), ha<span class="op">=</span><span class="st">&#39;center&#39;</span>)  </span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="co"># add x-axis labels  </span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>ax.set_xticks([<span class="dv">1</span>]) <span class="co"># Here we set the position of the x-tick  </span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>ax.set_xticklabels([<span class="st">&#39;MnO&#39;</span>]) <span class="co"># Here we set the label of the x-tick  </span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<figure>
+<img
+src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/boxplot_with_sample_ids.png?raw=true"
+alt="Boxplot" />
+<figcaption aria-hidden="true">Boxplot</figcaption>
+</figure>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h5 id="histogram-of-observations">Histogram of observations</h5>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>column_name <span class="op">=</span> <span class="st">&#39;MNO&#39;</span> <span class="co"># replace &#39;column_name&#39; with the actual column name  </span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># create histogram of the selected column  </span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>data[column_name].hist(bins<span class="op">=</span><span class="dv">50</span>)  </span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(column_name)  </span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Number of observations&#39;</span>)  </span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f&#39;Histogram of </span><span class="sc">{</span>column_name<span class="sc">}</span><span class="ss"> column&#39;</span>)  </span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">&#39;Hist_mno.png&#39;</span>)  </span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<figure>
+<img
+src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/Hist_mno.png?raw=true"
+alt="Histogram" />
+<figcaption aria-hidden="true">Histogram</figcaption>
+</figure>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h5 id="descriptive-statistics">Descriptive statistics</h5>
+<p>Then we can use the methods of descriptive statistics. Here it can be
+helpful to find out whether a characteristic and its values are normally
+distributed or not. For example, the Shapiro-Wilk test can be used for
+this purpose.</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats  </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># exclude columns  </span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>exclude_columns <span class="op">=</span> [<span class="st">&#39;SampleID&#39;</span>, <span class="st">&#39;Longitude&#39;</span>, <span class="st">&#39;Latitude&#39;</span>, <span class="st">&#39;Units&#39;</span>, <span class="st">&#39;Item_Group&#39;</span>]  </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>selected_columns <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> data.columns <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> exclude_columns]  </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># perform Shapiro-Wilk test for each selected column  </span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.05</span>  </span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column_name <span class="kw">in</span> selected_columns:  </span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    selected_data <span class="op">=</span> data[column_name]  </span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># check if the data has a value range greater than zero  </span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.ptp(selected_data) <span class="op">&gt;</span> <span class="dv">0</span>:  </span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        statistic, p_value <span class="op">=</span> stats.shapiro(selected_data)  </span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="ch">\n</span><span class="ss">Shapiro-Wilk test for column &#39;</span><span class="sc">{</span>column_name<span class="sc">}</span><span class="ss">&#39;:&quot;</span>)  </span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot; statistics: </span><span class="sc">{</span>statistic<span class="sc">}</span><span class="ss">&quot;</span>)  </span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot; p-value: </span><span class="sc">{</span>p_value<span class="sc">}</span><span class="ss">&quot;</span>)  </span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> p_value <span class="op">&gt;</span> alpha:  </span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f&quot; The data in column &#39;</span><span class="sc">{</span>column_name<span class="sc">}</span><span class="ss">&#39; appears to be normally distributed (H0 not rejected).&quot;</span>)  </span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:  </span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f&quot; The data in column &#39;</span><span class="sc">{</span>column_name<span class="sc">}</span><span class="ss">&#39; does not appear to be normally distributed (H0 rejected).&quot;</span>)  </span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:  </span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="ch">\n</span><span class="ss">The data in column &#39;</span><span class="sc">{</span>column_name<span class="sc">}</span><span class="ss">&#39; has a range of zero. Shapiro-Wilk test is not performed.&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Shapiro-Wilk</span> test for column <span class="st">&#39;AL2O3&#39;</span>:</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Statistic:</span> 0.9374846816062927</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">p-value:</span> 0.4661906361579895</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Data</span> in column <span class="st">&#39;AL2O3&#39;</span> appear to be normally distributed <span class="er">(</span><span class="ex">H0</span> not rejected<span class="kw">)</span><span class="bu">.</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Shapiro-Wilk</span> test for column <span class="st">&#39;BA&#39;</span>:</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Statistic:</span> 0.8701132535934448</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">p-value:</span> 0.0655660405755043</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Data</span> in column <span class="st">&#39;BA&#39;</span> appear to be normally distributed <span class="er">(</span><span class="ex">H0</span> not rejected<span class="kw">)</span><span class="bu">.</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Shapiro-Wilk</span> test for column <span class="st">&#39;CAO&#39;</span>:</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Statistic:</span> 0.777439534664154</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="ex">p-value:</span> 0.005249298643320799</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Data</span> in column <span class="st">&#39;CAO&#39;</span> does not appear to be normally distributed <span class="er">(</span><span class="ex">H0</span> rejected<span class="kw">)</span><span class="bu">.</span></span></code></pre></div>
+<p>Further methods like IQR can be used to statistically distinguish
+between outliers and errors. Here, of course, the outliers must be
+assessed and decide how to deal with outliers depending on the data set
+and the goal of the project.Outliers are innocent until proven guilty.
+Other than that, they should not be removed unless there is a valid
+reason to do so.</p>
+<p>Suitable methods are still to use to detect anomalies/outliers
+algorithms. Two are presented here that are included in
+<strong>sklearn</strong> by default:</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h3 id="lof---local-outlier-factors">LOF - Local Outlier Factors</h3>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> LocalOutlierFactor  </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler  </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># remove the columns you don&#39;t want to analyze  </span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.drop(columns<span class="op">=</span>[<span class="st">&quot;SampleID&quot;</span>, <span class="st">&quot;Longitude&quot;</span>, <span class="st">&quot;Latitude&quot;</span>, <span class="st">&quot;Units&quot;</span>, <span class="st">&quot;Item_Group&quot;</span>])  </span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co"># scale the data to make sure that all columns have a similar impact  </span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()  </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>scaled_data <span class="op">=</span> scaler.fit_transform(data)  </span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the Local Outlier Factor model  </span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>lof <span class="op">=</span> LocalOutlierFactor(n_neighbors<span class="op">=</span><span class="dv">12</span>, contamination<span class="op">=</span><span class="fl">0.05</span>) <span class="co"># set the desired parameters  </span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the model and get the predictions  </span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>outlier_predictions <span class="op">=</span> lof.fit_predict(scaled_data)  </span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the predictions to your original data set  </span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&quot;outlier&quot;</span>] <span class="op">=</span> outlier_predictions  </span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="co"># outliers are marked with -1, inliers with 1  </span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>outliers <span class="op">=</span> data[data[<span class="st">&quot;outlier&quot;</span>] <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>]  </span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>inliers <span class="op">=</span> data[data[<span class="st">&quot;outlier&quot;</span>] <span class="op">==</span> <span class="dv">1</span>]  </span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Outliers:&quot;</span>)  </span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(outliers)  </span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Inliers:&quot;</span>)  </span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(inliers)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Outliers:</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>   <span class="ex">AL2O3</span>   BA   CAO    CE     CO  ...     V    Y     YB    ZR  outlier</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span>   2.68  8.4  2.32  4.31  107.0  ...  61.0  0.0  0.291  2.15       <span class="at">-1</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[1</span> rows x 45 columns]</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Inliers:</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">AL2O3</span>     BA   CAO     CE     CO  ...     V       Y     YB     ZR  outlier</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span>    2.21  39.90  0.02  3.940  107.0  ...  34.0   0.470  0.047   0.73        1</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span>    1.02  30.40  0.83  3.850  107.0  ...  37.0   0.490  0.052   0.32        1</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="ex">3</span>    1.08  47.70  0.95  4.290  111.0  ...  35.0   0.297  0.036   0.43        1</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="ex">4</span>    2.59  17.60  0.04  1.610  114.0  ...  30.0   0.000  0.037   0.48        1</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="ex">5</span>    3.13   0.64  0.04  5.900   82.0  ...  77.0  10.800  1.100  24.70        1</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="ex">6</span>    3.65  40.00  3.73  1.410   95.0  ...  83.0   0.000  0.390   4.40        1</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="ex">7</span>    3.99  21.20  4.28  3.390   98.0  ...  77.0   4.780  0.530   8.70        1</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="ex">8</span>    4.49   1.39  0.04  0.390  104.0  ...  75.0   0.000  0.380   3.53        1</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="ex">9</span>    4.28   0.09  0.03  0.950  102.0  ...  82.0  17.100  1.960  13.00        1</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="ex">10</span>   3.42   0.83  3.24  0.261  103.0  ...  74.0   3.270  0.390   2.70        1</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="ex">11</span>   3.13   7.00  0.00  0.750    0.0  ...  68.0   0.000  0.330   2.65        1</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h3 id="isolation-forest">Isolation Forest</h3>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> IsolationForest  </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler  </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># remove the columns you don&#39;t want to analyze  </span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.drop(columns<span class="op">=</span>[<span class="st">&quot;SampleID&quot;</span>, <span class="st">&quot;Longitude&quot;</span>, <span class="st">&quot;Latitude&quot;</span>, <span class="st">&quot;Units&quot;</span>, <span class="st">&quot;Item_Group&quot;</span>])  </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co"># scale the data to make sure that all columns have a similar impact  </span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()  </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>scaled_data <span class="op">=</span> scaler.fit_transform(data)  </span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the isolation forest model  </span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>isolation_forest <span class="op">=</span> IsolationForest(contamination<span class="op">=</span><span class="fl">0.05</span>) <span class="co"># set the desired proportion of expected outliers  </span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the model and get the predictions  </span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>outlier_predictions <span class="op">=</span> isolation_forest.fit_predict(scaled_data)  </span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the predictions to your original dataset  </span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&quot;outlier&quot;</span>] <span class="op">=</span> outlier_predictions  </span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="co"># outliers are marked with -1, inliers with 1  </span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>outliers <span class="op">=</span> data[data[<span class="st">&quot;outlier&quot;</span>] <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>]  </span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>inliers <span class="op">=</span> data[data[<span class="st">&quot;outlier&quot;</span>] <span class="op">==</span> <span class="dv">1</span>]  </span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Outliers:&quot;</span>)  </span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(outliers)  </span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Inliers:&quot;</span>)  </span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(inliers)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Outliers:</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>   <span class="ex">AL2O3</span>    BA   CAO   CE    CO      CR  ...      U     V     Y   YB    ZR  outlier</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="ex">5</span>   3.13  0.64  0.04  5.9  82.0  5230.0  ...  0.127  77.0  10.8  1.1  24.7       <span class="at">-1</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[1</span> rows x 45 columns]</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Inliers:</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">AL2O3</span>     BA   CAO     CE     CO  ...     V       Y     YB     ZR  outlier</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span>    2.68   8.40  2.32  4.310  107.0  ...  61.0   0.000  0.291   2.15        1</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span>    2.21  39.90  0.02  3.940  107.0  ...  34.0   0.470  0.047   0.73        1</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span>    1.02  30.40  0.83  3.850  107.0  ...  37.0   0.490  0.052   0.32        1</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="ex">3</span>    1.08  47.70  0.95  4.290  111.0  ...  35.0   0.297  0.036   0.43        1</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="ex">4</span>    2.59  17.60  0.04  1.610  114.0  ...  30.0   0.000  0.037   0.48        1</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="ex">6</span>    3.65  40.00  3.73  1.410   95.0  ...  83.0   0.000  0.390   4.40        1</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="ex">7</span>    3.99  21.20  4.28  3.390   98.0  ...  77.0   4.780  0.530   8.70        1</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="ex">8</span>    4.49   1.39  0.04  0.390  104.0  ...  75.0   0.000  0.380   3.53        1</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="ex">9</span>    4.28   0.09  0.03  0.950  102.0  ...  82.0  17.100  1.960  13.00        1</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="ex">10</span>   3.42   0.83  3.24  0.261  103.0  ...  74.0   3.270  0.390   2.70        1</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="ex">11</span>   3.13   7.00  0.00  0.750    0.0  ...  68.0   0.000  0.330   2.65        1</span></code></pre></div>
+<p>Depending on the specific goals of a study and the available data,
+these and other algorithms and methods can help extract the information
+and insights needed to answer your scientific questions.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h2 id="data-types---meaning-level">Data Types - Meaning level</h2>
+<h3 id="type-1-non-informativerepetitive">Type 1:
+Non-informative/repetitive</h3>
+<p>To identify such data types, we can create a lists of features with a
+high percentage of the same value. A suitable example would be to show
+us columns where over 95% of the rows have the same value.</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of rows in the dataset</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>total_rows <span class="op">=</span> data.shape[<span class="dv">0</span>]</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list to hold columns with low information density</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>low_info_columns <span class="op">=</span> []</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Go through each column in the dataset</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> data.columns:</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Count the number of unique values in the column, including NaN values</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    unique_counts <span class="op">=</span> data[column].value_counts(dropna<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the percentage of the most common value</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>    dominant_value_pct <span class="op">=</span> (unique_counts <span class="op">/</span> total_rows).iloc[<span class="dv">0</span>]</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the percentage is more than 95%, add the column to the list and print relevant info</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> dominant_value_pct <span class="op">&gt;</span> <span class="fl">0.95</span>:</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>        low_info_columns.append(column)</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&#39;Column: </span><span class="sc">{0}</span><span class="st">, Dominant Value Percentage: </span><span class="sc">{1:.5f}</span><span class="st">%&#39;</span>.<span class="bu">format</span>(column, dominant_value_pct <span class="op">*</span> <span class="dv">100</span>))</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(unique_counts)</span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>()</span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new DataFrame with the columns of low information density</span></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>low_info_data <span class="op">=</span> data[low_info_columns]</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the new DataFrame as a CSV file</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>low_info_data.to_csv(<span class="st">&quot;low_information_data.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">K:</span> 100.00000%</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0.0</span> 12</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="ex">name:</span> K, dtype: int64</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="ex">RB87_SR86:</span> 100.00000%</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="ex">0.0</span> 12</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Name:</span> RB87_SR86, dtype: int64</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="ex">SR87_SR86:</span> 100.00000%</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="ex">0.0</span> 12</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Name:</span> SR87_SR86, dtype: int64</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Longitude:</span> 100.00000%</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="ex">38.21</span> 12</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="ex">Name:</span> Longitude, dtype: int64</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="ex">Latitude:</span> 100.00000%</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="ex">3.9</span> 12</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="ex">Name:</span> Latitude, dtype: int64</span></code></pre></div>
+<p>In such cases the individual columns/values must be examined
+individually whether they are informative or not. It is important to
+find out the decisive reason why the values are repeated. If the values
+are not informative, they can be removed.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h3 id="type-2-irrelevant-data-type">Type 2: Irrelevant data type</h3>
+<p>The quality of the data collected plays an essential role in
+providing meaningful information for the successful implementation of a
+project. Characteristics that are not related to the project’s problem
+are irrelevant to the analysis.</p>
+<p>A systematic examination of all available characteristics is required
+to determine their relevance. Characteristics that are not meaningful to
+the project goals should be removed from the analysis to ensure focused
+and purposeful results.</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co"># remove row based on index n OR:</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop(n)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co"># remove column &#39;name&#39; OR:</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop(<span class="st">&#39;MNO&#39;</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co"># remove columns &#39;MNO&#39; and &#39;FEO</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop([<span class="st">&#39;MNO&#39;</span>, <span class="st">&#39;FEO&#39;</span>], axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div>
+<h3 id="type-3-duplicates">Type 3: Duplicates</h3>
+<p>Duplicate data exists when copies of the same observation are
+present. It often happens that there are several types of data in one
+column, which we have to handle separately. In this case we can use the
+split function:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>splitted_columns <span class="op">=</span> df[<span class="st">&#39;author, column&#39;</span>].<span class="bu">str</span>.split(<span class="st">&#39;,&#39;</span>,expand<span class="op">=</span><span class="va">True</span>)  </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>splitted_columns</span></code></pre></div>
+<p>Followed by clearly mapping the new columns and removing the old
+column that contained multiple pieces of information:</p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;author&#39;</span>] <span class="op">=</span> splitted_columns[<span class="dv">0</span>]  </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;column&#39;</span>] <span class="op">=</span> splitted_columns[<span class="dv">1</span>]  </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df.drop(<span class="st">&#39;author, column&#39;</span>, axis<span class="op">=</span><span class="dv">1</span>, inplace<span class="op">=</span><span class="va">True</span>)  </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">15</span>)</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h4 id="duplicate-type-1">Duplicate Type 1</h4>
+<p>In geochemistry, datasets may contain duplicates where all variable
+values within an observation are the same. Identifying and removing such
+duplicates is an important step in data preparation to ensure the
+integrity and validity of statistical analyses.</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Considering &#39;MNO&#39; column is unique, let&#39;s see the effect of removing it</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>deduplicated_data <span class="op">=</span> df.drop(columns<span class="op">=</span><span class="st">&#39;MNO&#39;</span>).drop_duplicates()</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare the shape before and after deduplication</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Original DataFrame shape: </span><span class="sc">{</span>df<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Deduplicated DataFrame shape: </span><span class="sc">{</span>deduplicated_data<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Output:</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Original</span> DataFrame shape: <span class="er">(</span><span class="ex">12,</span> 49<span class="kw">)</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Deduplicated</span> DataFrame shape: <span class="er">(</span><span class="ex">12,</span> 48<span class="kw">)</span></span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h4 id="duplicate-type-2">Duplicate Type 2</h4>
+<p>In some cases, it is appropriate to weed out redundant records based
+on a set of specific, unique identifiers.</p>
+<p>For example, in a geochemical context, it is extremely unlikely that
+two samples will be collected at exactly the same time and location, and
+will also have identical chemical compositions.</p>
+<p>A grouping of essential characteristics can serve as unique
+identifiers for such samples. These include, for example, the time of
+sampling, geographic coordinates, pH, heavy metal and mineral content,
+and organic compound content. These characteristics can be used to
+identify and remove possible duplicates.</p>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>key <span class="op">=</span> [<span class="st">&#39;SampleID&#39;</span>, <span class="st">&#39;AL2O3&#39;</span>, <span class="st">&#39;FEO&#39;</span>, <span class="st">&#39;FEOT&#39;</span>, <span class="st">&#39;K&#39;</span>, <span class="st">&#39;Longitude&#39;</span>, <span class="st">&#39;Latitude&#39;</span>]  </span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>df.fillna(<span class="op">-</span><span class="dv">999</span>).groupby(key)[<span class="st">&#39;SampleID&#39;</span>].count().sort_values(ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">20</span>)  </span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>df_dedupped2 <span class="op">=</span> df.drop_duplicates(subset<span class="op">=</span>key)  </span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)  </span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)  </span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_dedupped2.shape)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">SampleID</span>  AL2O3     BA   CAO  ...  Longitude  Latitude  Units  Item_Group</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span>     137833   2.68   8.40  2.32  ...      38.21       3.9    WT%          mj</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span>     137834   2.21  39.90  0.02  ...      38.21       3.9    WT%          mj</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span>     137835   1.02  30.40  0.83  ...      38.21       3.9    PPM         ree</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="ex">3</span>     137836   1.08  47.70  0.95  ...      38.21       3.9    PPM          te</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="ex">4</span>     137837   2.59  17.60  0.04  ...      38.21       3.9    WT%          mj</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="ex">5</span>     137838   3.13   0.64  0.04  ...      38.21       3.9    WT%          mj</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="ex">6</span>     137839   3.65  40.00  3.73  ...      38.21       3.9    PPM          te</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="ex">7</span>     137840   3.99  21.20  4.28  ...      38.21       3.9    PPM          te</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="ex">8</span>     137841   4.49   1.39  0.04  ...      38.21       3.9    WT%          mj</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="ex">9</span>     137842   4.28   0.09  0.03  ...      38.21       3.9    WT%          mj</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="ex">10</span>    137843   3.42   0.83  3.24  ...      38.21       3.9    WT%          mj</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="ex">11</span>    137844   3.13   7.00  0.00  ...      38.21       3.9    PPM         ree</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="ex">[12</span> rows x 49 columns]</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">12,</span> 49<span class="kw">)</span></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">12,</span> 49<span class="kw">)</span></span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h3 id="scaling-transformation-and-normalization">Scaling,
+transformation and normalization</h3>
+<p>Scaling and transformation refer to the fitting of data to a specific
+scale, such as in the range of 0-100 or 0-1. This can facilitate the
+presentation and interpretation of data, especially in reducing skewness
+and handling outliers. Examples of transformations include logarithm,
+square root, and inverse. Using these techniques can help optimize data
+visualization and improve comparability of data points within a
+dataset.</p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># select numerical columns only  </span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>numerical_columns <span class="op">=</span> data.select_dtypes(include<span class="op">=</span>[<span class="st">&#39;number&#39;</span>]).columns  </span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="co"># min-max scaling  </span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>data_min_max <span class="op">=</span> data.copy()  </span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>data_min_max[numerical_columns] <span class="op">=</span> (data[numerical_columns] <span class="op">-</span> data[numerical_columns].<span class="bu">min</span>()) <span class="op">/</span> (data[numerical_columns].<span class="bu">max</span>() <span class="op">-</span> data[numerical_columns].<span class="bu">min</span>())  </span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="co"># standardization (Z-score normalization)  </span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>data_standardized <span class="op">=</span> data.copy()  </span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>data_standardized[numerical_columns] <span class="op">=</span> (data[numerical_columns] <span class="op">-</span> data[numerical_columns].mean()) <span class="op">/</span> data[numerical_columns].std()  </span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Logarithmic transformation  </span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>data_log <span class="op">=</span> data.copy()  </span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>data_log[numerical_columns] <span class="op">=</span> data[numerical_columns].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x<span class="op">+</span><span class="dv">1</span>).<span class="bu">apply</span>(np.log) <span class="co"># x+1 to avoid errors with logarithm of 0  </span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a><span class="co"># square root transformation  </span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>data_sqrt <span class="op">=</span> data.copy()  </span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>data_sqrt[numerical_columns] <span class="op">=</span> data[numerical_columns].<span class="bu">apply</span>(np.sqrt)  </span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Inverse transformation  </span></span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>data_inverse <span class="op">=</span> data.copy()  </span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>data_inverse[numerical_columns] <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (data[numerical_columns] <span class="op">+</span> <span class="fl">1e-9</span>) <span class="co"># 1e-9 to avoid division by zero  </span></span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a><span class="co"># output transformed data sets  </span></span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Min-Max scaled data:</span><span class="ch">\n</span><span class="st">&quot;</span>, data_min_max)  </span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Standardized data:</span><span class="ch">\n</span><span class="st">&quot;</span>, data_standardized)  </span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Logarithmically transformed data:</span><span class="ch">\n</span><span class="st">&quot;</span>, data_log)  </span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Square root transformed data:</span><span class="ch">\n</span><span class="st">&quot;</span>, data_sqrt)  </span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Inverse-transformed data:</span><span class="ch">\n</span><span class="st">&quot;</span>, data_inverse)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Min-Max</span> scaled data:</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>     <span class="ex">SampleID</span> AL2O3 BA ...  Latitude Units Item_Group</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span> 0.000000 0.478386 0.174543 ...       NaN WT% mj</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span> 0.090909 0.342939 0.836169 ...       NaN WT% mj</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span> 0.181818 0.000000 0.636631 ...       NaN PPM ree</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Standardized</span> data:</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>     <span class="ex">SampleID</span> AL2O3 BA ...  Latitude Units Item_Group</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span> <span class="at">-1.525426</span> <span class="at">-0.259611</span> <span class="at">-0.540761</span> ...       NaN WT% mj</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span> <span class="at">-1.248075</span> <span class="at">-0.676764</span> 1.246800 ...       NaN WT% mj</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span> <span class="at">-0.970725</span> <span class="at">-1.732959</span> 0.707694 ...       NaN PPM ree</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a><span class="ex">Logarithmically</span> transformed data:</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>      <span class="ex">SampleID</span> AL2O3 BA ...  Latitude Units Item_Group</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span> 11.833805 1.302913 2.240710 ...  1.589235 WT% mj</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span> 11.833813 1.166271 3.711130 ...  1.589235 WT% mj</span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span> 11.833820 0.703098 3.446808 ...  1.589235 PPM ree</span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a><span class="ex">Square</span> root transformed data:</span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>       <span class="ex">SampleID</span> AL2O3 BA ...  Latitude Units Item_Group</span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span> 371.258670 1.637071 2.898275 ...  1.974842 WT% mj</span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span> 371.260017 1.486607 6.316645 ...  1.974842 WT% mj</span>
+<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span> 371.261363 1.009950 5.513620 ...  1.974842 PPM ree</span>
+<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb39-28"><a href="#cb39-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-29"><a href="#cb39-29" aria-hidden="true" tabindex="-1"></a><span class="ex">Inverse-transformed</span> data:</span>
+<span id="cb39-30"><a href="#cb39-30" aria-hidden="true" tabindex="-1"></a>     <span class="ex">SampleID</span> AL2O3 BA ...  Latitude Units Item_Group</span>
+<span id="cb39-31"><a href="#cb39-31" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span> 0.000007 0.373134 0.119048 ...   0.25641 WT% mj</span>
+<span id="cb39-32"><a href="#cb39-32" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span> 0.000007 0.452489 0.025063 ...   0.25641 WT% mj</span>
+<span id="cb39-33"><a href="#cb39-33" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span> 0.000007 0.980392 0.032895 ...   0.25641 PPM ree</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h2 id="cleaning-the-data">Cleaning the data</h2>
+<h3 id="missing-values">Missing values</h3>
+<p>Missing values in geochemical data can be handled in several
+ways:</p>
+<ol type="1">
+<li>elimination, in which rows or columns with missing values are
+removed.</li>
+<li>imputation, where missing values are calculated based on existing
+data, using various methods such as statistical values, linear
+regression, or hot deck imputation.</li>
+<li>labeling, in which missing data are replaced with special values or
+categories to maintain the information content. It is important to
+distinguish between missing values, default values, and unknown values,
+and to consider the loss of information when deciding on a method.</li>
+</ol>
+<p><strong>Elimination</strong>:</p>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="co"># remove rows with missing values</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>data_cleaned_rows <span class="op">=</span> data.dropna()</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="co"># remove columns with missing values</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>data_cleaned_columns <span class="op">=</span> data.dropna(axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div>
+<p><strong>Imputation</strong>:</p>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># replace missing values with the median of the column</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>data_median_imputed <span class="op">=</span> data.fillna(data.median())</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Replace missing values in column &#39;AL2O3&#39; with random values in the range of 2 standard deviations from the average</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>mean_AL2O3 <span class="op">=</span> data[<span class="st">&#39;AL2O3&#39;</span>].mean()</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>std_AL2O3 <span class="op">=</span> data[<span class="st">&#39;AL2O3&#39;</span>].std()</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>count_nan_AL2O3 <span class="op">=</span> data[<span class="st">&#39;AL2O3&#39;</span>].isnull().<span class="bu">sum</span>()</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>rand_AL2O3 <span class="op">=</span> np.random.randint(mean_AL2O3 <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> std_AL2O3, mean_AL2O3 <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> std_AL2O3, size<span class="op">=</span>count_nan_AL2O3)</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&#39;AL2O3&#39;</span>][data[<span class="st">&#39;AL2O3&#39;</span>].isnull()] <span class="op">=</span> rand_AL2O3</span></code></pre></div>
+<p><strong>Labeling</strong>:</p>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your Dataset</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&#39;path/to/Data.csv&#39;</span>)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="co"># replace missing numeric values with 0</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>data_zero_filled <span class="op">=</span> data.fillna(<span class="dv">0</span>)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="co"># replace missing categorical values in &#39;Units&#39; column with &#39;Missing</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>data_category_flagged <span class="op">=</span> data.fillna({<span class="st">&#39;Units&#39;</span>: <span class="st">&#39;Missing&#39;</span>})</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<h2 id="verification">Verification</h2>
+<p>Verification should be performed both <strong>before</strong> and
+<strong>after</strong> scaling, transformation, and normalization.
+Performing verification before scaling ensures that the changes made in
+the data cleaning process are correct and will not have an unintended
+effect on the data. Performing verification after scaling,
+transformation, and normalization allows you to verify the quality and
+consistency of the scaled and transformed data and ensure that the
+methods used have not changed the data in an undesirable way.</p>
+<p><strong>Visualizations</strong>:</p>
+<p>Re-create visualizations such as histograms, boxplots, or
+scatterplots to verify that the distribution of the data and the
+relationships between columns are as expected.</p>
+<p><strong>Check the number of missing values</strong>:</p>
+<p>You can do this again with the heatmap or the list of percentages of
+missing values.</p>
+<p><strong>Sample check</strong>:</p>
+<p>Manually check a few data points to make sure the values are correct
+and consistent.</p>
+<p><strong>Check data types</strong>:</p>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;/path/to/csv&quot;</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>df.dtypes</span></code></pre></div>
+<p><strong>Check the uniqueness of IDs or keys</strong>:</p>
+<p>If your dataset contains an ID column or unique key, make sure there
+are no duplicates.</p>
+<p><strong>Statistical Summaries</strong>:</p>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ydata_profiling <span class="im">import</span> ProfileReport  </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&quot;restructed_data.csv&quot;</span>)  </span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>columns_to_ignore <span class="op">=</span> [<span class="st">&#39;SampleID&#39;</span>, <span class="st">&#39;Units&#39;</span>, <span class="st">&#39;Item_Group&#39;</span>, <span class="st">&#39;Latitude&#39;</span>, <span class="st">&#39;Longitude&#39;</span>]  </span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>columns_to_profile <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> data.columns <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> columns_to_ignore]  </span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>profile <span class="op">=</span> ProfileReport(data[columns_to_profile], title<span class="op">=</span><span class="st">&quot;dataset&quot;</span>)  </span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>profile.to_file(<span class="st">&quot;dataset.html&quot;</span>)</span></code></pre></div>
+<figure>
+<img
+src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/report.png?raw=true"
+alt="Report" />
+<figcaption aria-hidden="true">Report</figcaption>
+</figure>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h2 id="documentation">Documentation</h2>
+<p>Documentation of the data cleaning process is an essential part of
+processing geochemical data sets. Careful documentation helps to ensure
+transparency, traceability, and reproducibility of results. This is
+critical to maintaining scientific integrity and enhancing the
+credibility of research results. When documenting data cleaning related
+to geochemical datasets, there are several aspects to consider:</p>
+<ol type="1">
+<li><p><strong>Describe the raw data</strong>: Document the source and
+extent of geochemical data, including analytical methods used, sampling
+processes, and initial dataset structure.</p></li>
+<li><p><strong>Determine Data Quality Requirements</strong>: Determine
+the data quality and consistency criteria required for your specific
+geochemical question and document these requirements.</p></li>
+<li><p><strong>Steps of the Data Cleaning Process</strong>: List a
+detailed description of all steps performed in the data cleaning
+process, such as identifying and removing outliers, correcting
+inconsistent data, standardizing units of measure, or removing
+duplicates.</p></li>
+<li><p><strong>Tools and Scripts Used</strong>: Document all Python
+libraries, functions, and scripts used in the Data Cleaning process to
+ensure reproducibility of results.</p></li>
+<li><p><strong>Decisions and Justifications</strong>: Explain the
+decisions made during the Data Cleaning process and provide the
+rationale for those decisions. This may include, for example, selecting
+specific thresholds for removing outliers or applying specific
+normalization procedures.</p></li>
+<li><p><strong>Changes and Impacts</strong>: Describe how the data
+cleaning steps performed affected the structure, volume, and quality of
+the geochemical data and, if applicable, show the impact of these
+changes on the results of your analysis.</p></li>
+<li><p><strong>Versioning and Change History</strong>: Maintain a change
+history of the various versions of your Data Cleaning scripts and
+documentation to facilitate collaboration and tracking of changes over
+time.</p></li>
+</ol>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="references">References</h3>
+<p><strong>Walker, M. (2020)</strong> Python Data Cleaning Cookbook:
+Modern Techniques and Python Tools to Detect and Remove Dirty Data and
+Extract Key Insights. Packt Publishing.</p>
+<p><strong>pandas</strong> McKinney, W. (2010). “Data Structures for
+Statistical Computing in Python.” Proceedings of the 9th Python in
+Science Conference. pp. 56-61.</p>
+<p><strong>missingno</strong> Bilogur, (2018). Missingno: a missing data
+visualization suite. Journal of Open Source Software, 3(22), 547,
+https://doi.org/10.21105/joss.00547</p>
+<p><strong>matplotlib</strong> Hunter, J. D. (2007). “Matplotlib: A 2D
+Graphics Environment.” Computing in Science &amp; Engineering, 9(3),
+pp. 90-95.</p>
+<p><strong>pyproj</strong> The pyproj library is a Python interface to
+PROJ (software for converting between geographic coordinate systems).
+The main reference would therefore be the PROJ software: PROJ
+contributors (2020). “PROJ, a library for cartographic projections and
+coordinate transformations.”</p>
+<p><strong>scipy</strong> Virtanen, P., Gommers, R., Oliphant, T. E.,
+Haberland, M., Reddy, T., Cournapeau, D., … &amp; SciPy 1.0
+Contributors. (2020). “SciPy 1.0: fundamental algorithms for scientific
+computing in Python.” Nature methods, 17(3), pp. 261-272.</p>
+<p><strong>sklearn.ensemble.IsolationForest</strong> Liu, F. T., Ting,
+K. M., &amp; Zhou, Z. H. (2008). “Isolation Forest.” 2008 Eighth IEEE
+International Conference on Data Mining. pp. 413-422.</p>
+<p><strong>sklearn.preprocessing.StandardScaler</strong> Pedregosa, F.,
+Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., …
+&amp; Vanderplas, J. (2011). “Scikit-learn: Machine Learning in Python.”
+Journal of Machine Learning Research, 12, pp. 2825–2830.</p>
+<p><strong>numpy</strong> Harris, C. R., Millman, K. J., van der Walt,
+S. J., Gommers, R., Virtanen, P., Cournapeau, D., … &amp; SciPy 1.0
+Contributors. (2020). “Array programming with NumPy.” Nature, 585(7825),
+pp. 357-362.</p>
+<p><strong>ydata_profiling.ProfileReport</strong> As of my knowledge
+cutoff in September 2021, there was no specific scientific literature
+available for the ydata_profiling library. It’s recommended to cite the
+library’s GitHub repository:
+https://github.com/ydataai/ydata-quality</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="license">License</h3>
+<p><strong>CC BY-NC-SA 4.0 Licence</strong></p>
+<p>With this licence, you may use, modify and share the work as long as
+you credit the original author. However, you may not use it for
+commercial purposes, i.e. you may not make money from it. And if you
+make changes and share the new work, it must be shared under the same
+conditions.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+</body>
+</html>

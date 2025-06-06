@@ -1,428 +1,569 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://kit.fontawesome.com/455214c00f.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
-    <title>Portfolio - Timm Wirtz</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/455214c00f.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" async src="https://cdn.credly.com/assets/utilities/embed.js"></script>
+  <title>Timm Wirtz - Portfolio & Blog</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader@0.15.3"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Share Tech Mono', monospace;
+      display: flex;
+      height: 100vh;
+      background-color: #000;
+      color: #f0f0f0;
+    }
+
+    .section {
+      padding: 20px;
+      border-right: 1px solid #222;
+    }
+
+    .profile {
+      width: 20%;
+      background-color: #000;
+      padding: 20px;
+    }
+
+    .profile p {
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .profile h2 {
+      text-align: center;
+    }
+
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #ccc;
+      display: block;
+      margin: 0 auto 20px auto;
+    }
+
+    .nav {
+      width: 20%;
+      background-color: #000;
+    }
+
+    .content {
+      width: 60%;
+      padding: 20px;
+      background-color: #000;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .nav a {
+      display: block;
+      color: #aaa;
+      padding: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 20px;
+      background-color: currentColor;
+      margin-left: 5px;
+      animation: blink 1.5s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% {
+        opacity: 1;
+      }
+      51%, 100% {
+        opacity: 0;
+      }
+    }
+
+    .nav a,
+    .submenu a {
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav a:hover,
+    .submenu a:hover {
+      color: #fff;
+      transform: scale(1.02);
+    }
+
+    .submenu {
+      margin-left: 20px;
+      margin-top: -5px;
+      border-left: 1px solid #222;
+      padding-left: 10px;
+    }
+
+    .submenu a {
+      padding: 8px 10px;
+      font-size: 0.9em;
+      color: #777;
+    }
+
+    .submenu a:hover {
+      color: #fff;
+    }
+
+    .nested-submenu {
+      margin-left: 15px;
+      border-left: 1px solid #333;
+      padding-left: 10px;
+    }
+
+    .submenu-year > a {
+      cursor: pointer;
+      color: #777;
+      display: block;
+      padding: 6px 10px;
+      font-weight: bold;
+      user-select: none;
+    }
+
+    .submenu-year > a:hover {
+      color: #fff;
+      transform: scale(1.02);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    p, li {
+      color: #ccc;
+    }
+
+    p {
+      margin-bottom: 1em;
+      line-height: 1.5;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    pre {
+      background-color: #212121;
+      color: #eee;
+      padding: 10px;
+      overflow-x: auto;
+      border-radius: 4px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9em;
+      line-height: 1.4;
+      margin-bottom: 1em;
+    }
+    code {
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .post-content {
+      padding-left: 20px;
+      padding-right: 20px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #content-area {
+      opacity: 1;
+      transition: opacity 0.5s ease;
+      overflow-y: auto;
+    }
+    #content-area.fade-out {
+      opacity: 0;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #111;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+      border-top: 2px solid #444;
+    }
+
+    .bottom-bar a img {
+      height: 19px;
+      transition: transform 0.2s ease;
+    }
+
+    .bottom-bar a:hover img {
+      transform: scale(1.05);
+    }
+
+
+    .glider-img {
+      height: 24px;
+    }
+
+    a {
+      color: #00FF00;
+      text-decoration: none;
+    }
+
+
+    a:hover {
+      color: #00FF00;
+      text-decoration: underline;
+    }
+
+    .post-content img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 1em auto;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .icon-link {
+      color: #777;
+      font-size: 40px;
+      text-decoration: none;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .icon-link:hover {
+      color: #fff;
+      transform: scale(1.25);
+    }
+
+    .icon-label {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+
+  </style>
 </head>
 <body>
+  <div class="section profile">
+    <h2>Timm M. Wirtz</h2>
 
-<div id="progressbar"></div>
+    <img src="japanese-maneki-neko-2-1575369720.jpg" class="profile-image" />
+    <p>
+      My name is Timm, and I am a dedicated IT researcher and passionate programmer.
+      I am deeply engaged with open-source projects and the collaborative sharing of knowledge
+      to drive innovations that shape a better future. Effective communication and strategic thinking are
+      essential to me—skills I continuously refine through chess, as well as through the physical and
+      mental challenges of martial arts and bouldering. My relentless curiosity drives me to explore
+      beyond the surface—whether in the complex world of data or in savoring the simple joys of life,
+      like a piece of "Bienenstich".
+    </p>
+  </div>
 
-<style>
-.hidden {
-    display: none;
+  <div class="section nav">
+    <h2>
+      Navigation~$
+      <span class="cursor"></span>
+    </h2>
+    <a onclick="showHome()">Home</a>
+    <a onclick="showContent('portfolio')">Portfolio</a>
+    <a onclick="toggleSubmenu()">Blog</a>
+    <div id="blog-submenu" class="submenu hidden">
+      <div class="submenu-year">
+        <a onclick="toggleYearSubmenu('year2025')">2025 ▸</a>
+        <div id="year2025" class="submenu nested-submenu hidden">
+          <a onclick="showPost('spark_mindmap1')">Apache Spark - Mindmap</a>
+        </div>
+      </div>
+      <div class="submenu-year">
+        <a onclick="toggleYearSubmenu('year2024')">2024 ▸</a>
+        <div id="year2024" class="submenu nested-submenu hidden">
+          <a onclick="showPost('iris_dataset')">Iris Dataset</a>
+        </div>
+      </div>
+      <div class="submenu-year">
+        <a onclick="toggleYearSubmenu('year2023')">2023 ▸</a>
+        <div id="year2023" class="submenu nested-submenu hidden">
+          <a onclick="showPost('hugo_hackside')">Create and deploy a Blog with Hugo</a>
+          <a onclick="showPost('mastodon')">Mastodon and its tools</a>
+          <a onclick="showPost('volatility')">Memory forensics with Volatility</a>
+          <a onclick="showPost('data_cleaning')">Common Data Cleaning methods</a>
+          <a onclick="showPost('project_euler')">Project Euler</a>
+        </div>
+      </div>
+      <div class="submenu-year">
+        <a onclick="toggleYearSubmenu('year2022')">2022 ▸</a>
+        <div id="year2022" class="submenu nested-submenu hidden">
+          <a onclick="showPost('common_git_methods')">Common methods of git</a>
+        </div>
+      </div>
+    </div>
+    <a onclick="showContent('contact')">Contact</a>
+  </div>
+
+  <div class="section content">
+    <div id="content-area">
+      <div class="post-content">
+      <h2>Welcome!</h2>
+      <p>Nice to have you here!</p>
+      <p>This is my personal space and portfolio in the digital universe, a diary of my thoughts, projects and learning processes. This blog
+      is my outlet, my tool to create clarity in my head and process my experiences. Every post is a part
+      of my journey, a piece of the puzzle in my continuous learning process.</p>
+
+      <p>This is where I share what moves and engages me, in the hope that it will also become an educational archive of my journey
+      for myself. From technical experiments to personal reflections, every page of this blog is a reflection of my love of
+      discovery and my desire to keep growing.</p>
+
+      <p>This space is primarily for me, a journal of my thoughts and projects. If you choose to be part of this journey by reading
+      my posts, I'd love your company.</p>
+
+      <p>In the simplicity of this blog lies my way of understanding myself and my projects and learning a little more every day.</p>
+
+      <hr />
+
+        <br>
+
+      <p>Here we follow the principle that everyone is welcome, regardless of appearance, age, origin, species, gender, social
+      status, physical or mental abilities, or any other personal characteristics. We do not judge anyone based on these
+      characteristics. If you share this inclusive philosophy, don't hesitate to get in touch. Even if your views differ, you
+      are welcome to contact us, although it may be difficult to find a common consensus.</p>
+
+      <p>All posts are licensed under the <strong>CC BY-NC-SA 4.0</strong> and each is marked with a shield, as well as an
+      alternative catchy description at the end of each post what this license basically says.</p>
+
+      <hr />
+
+        <br>
+
+      <p>If you value what I share here and want to support me, you have the opportunity to make a contribution,
+      big or small. Sharing this site, making a donation, noticing and reporting errors/bugs/exploits, ideas for topics or
+      use my posts for your own work allows me to continue to dedicate myself to my projects and to further
+      expand them.</p>
+
+      <p>Thank you very much for your support!</p>
+        <br><br><br>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSubmenu() {
+      const submenu = document.getElementById('blog-submenu');
+      submenu.classList.toggle('hidden');
+    }
+
+    function toggleYearSubmenu(yearId) {
+      const submenu = document.getElementById(yearId);
+      submenu.classList.toggle('hidden');
+    }
+
+    function fadeContentChange(newContentHtml) {
+      const contentArea = document.getElementById('content-area');
+      contentArea.classList.add('fade-out');
+
+      setTimeout(() => {
+        contentArea.innerHTML = newContentHtml;
+        contentArea.classList.remove('fade-out');
+      }, 500);
+    }
+
+    function showHome() {
+      const homeHtml = `
+        <div class="post-content">
+          <h2>Welcome!</h2>
+          <p>Nice to have you here!</p>
+
+          <p>This is my personal space and portfolio in the digital universe, a diary of my thoughts, projects and learning processes. This blog
+          is my outlet, my tool to create clarity in my head and process my experiences. Every post is a part
+          of my journey, a piece of the puzzle in my continuous learning process.</p>
+
+          <p>This is where I share what moves and engages me, in the hope that it will also become an educational archive of my journey
+          for myself. From technical experiments to personal reflections, every page of this blog is a reflection of my love of
+          discovery and my desire to keep growing.</p>
+
+          <p>This space is primarily for me, a journal of my thoughts and projects. If you choose to be part of this journey by reading
+          my posts, I'd love your company.</p>
+
+          <p>In the simplicity of this blog lies my way of understanding myself and my projects and learning a little more every day.</p>
+
+          <hr />
+
+          <br>
+
+          <p>Here we follow the principle that everyone is welcome, regardless of appearance, age, origin, species, gender, social
+          status, physical or mental abilities, or any other personal characteristics. We do not judge anyone based on these
+          characteristics. If you share this inclusive philosophy, don't hesitate to get in touch. Even if your views differ, you
+          are welcome to contact us, although it may be difficult to find a common consensus.</p>
+
+          <p>All posts are licensed under the <strong>CC BY-NC-SA 4.0</strong> and each is marked with a shield, as well as an
+          alternative catchy description at the end of each post what this license basically says.</p>
+
+          <hr />
+
+          <br>
+
+          <p>If you value what I share here and want to support me, you have the opportunity to make a contribution,
+          big or small. Sharing this site, making a donation, noticing and reporting errors/bugs/exploits, ideas for topics or
+          use my posts for your own work allows me to continue to dedicate myself to my projects and to further
+          expand them.</p>
+
+          <p>Thank you very much for your support!</p>
+          <br><br><br>
+      `;
+      fadeContentChange(homeHtml);
+    }
+
+    function showContent(id) {
+  if (id === 'portfolio') {
+    showPost('portfolio');
+  } else if (id === 'contact') {
+    fadeContentChange(`
+      <div class="post-content">
+        <h2>Contact</h2>
+        <div class="social-icons">
+          <div class="icon-item">
+            <a href="https://github.com/tmwProjects" class="icon-link" target="_blank">
+              <i class="fab fa-github"></i>
+            </a>
+            <span class="icon-label">GitHub</span>
+          </div>
+
+          <div class="icon-item">
+            <a href="https://datasci.social/@tmwProjects" class="icon-link" target="_blank">
+              <i class="fa-brands fa-mastodon"></i>
+            </a>
+            <span class="icon-label">Mastodon</span>
+          </div>
+
+          <div class="icon-item">
+            <a href="https://de.linkedin.com/in/timm-wirtz" class="icon-link" target="_blank">
+              <i class="fa-brands fa-linkedin"></i>
+            </a>
+            <span class="icon-label">LinkedIn</span>
+          </div>
+
+          <div class="icon-item">
+            <a href="https://www.credly.com/users/timm-wirtz" class="icon-link" target="_blank">
+              <i class="fa-solid fa-certificate"></i>
+            </a>
+            <span class="icon-label">Credly</span>
+          </div>
+
+          <div class="icon-item">
+            <a href="mailto:tmw.contact@protonmail.com" class="icon-link">
+              <i class="fa-solid fa-envelope"></i>
+            </a>
+            <span class="icon-label">E-Mail</span>
+          </div>
+        </div>
+      </div>
+    `);
+  }
 }
-</style>
+
+  function showPost(postId) {
+    const contentArea = document.getElementById('content-area');
+    contentArea.classList.add('fade-out');
+
+    setTimeout(() => {
+      fetch(`posts/${postId}.html`)
+        .then(response => {
+          if (!response.ok) throw new Error("Datei nicht gefunden");
+          return response.text();
+        })
+        .then(html => {
+          contentArea.innerHTML = `<div class="post-content">${html}</div>`;
+          contentArea.classList.remove('fade-out');
+
+          contentArea.classList.remove('fade-out');
+            setTimeout(() => {
+              contentArea.scrollTop = 0;
+            }, 50);
+
+
+          // ✅ Credly-Script nachladen, wenn Portfolio geladen wurde
+          if (postId === 'portfolio') {
+            const script = document.createElement('script');
+            script.src = "https://cdn.credly.com/assets/utilities/embed.js";
+            script.async = true;
+            document.body.appendChild(script);
+          }
+        })
+        .catch(error => {
+          contentArea.innerHTML = "<p>Fehler beim Laden des Beitrags.</p>";
+          contentArea.classList.remove('fade-out');
+          console.error(error);
+        });
+    }, 500);
+  }
+  </script>
+</body>
+<div class="bottom-bar">
+  <a href="https://liberapay.com/tmwProjects/donate" target="_blank" rel="noopener">
+    <img src="https://img.shields.io/badge/Donate-Liberapay-yellow" alt="Donate on Liberapay">
+  </a>
+  <a href="https://www.buymeacoffee.com/tmwcontactQ" target="_blank" rel="noopener">
+    <img src="https://img.shields.io/badge/Donate-BuyMeACoffee-orange" alt="Donate on BuyMeACoffee">
+  </a>
+  <a href="https://myhits.vercel.app" target="_blank" rel="noopener">
+    <img src="https://myhits.vercel.app/api/hit/https%3A%2F%2Ftmwprojects.github.io%2F" alt="Page Visits">
+  </a>
+
+  <div class="spacer"></div>
+  <!-- Glider rechts -->
+  <a href="http://www.catb.org/hacker-emblem/" target="_blank" rel="noopener">
+    <img src="http://www.catb.org/hacker-emblem/glider.png" alt="Glider" class="glider-img" />
+  </a>
+
+</div>
 
 <script>
-window.onscroll = function() {myFunction()};
-
-function myFunction() {
-  var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-  var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  var scrolled = (winScroll / height) * 100;
-  document.getElementById("progressbar").style.width = (scrolled / 2) + "%";
-}
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof CredlyBadge !== "undefined" && typeof CredlyBadge.autoEmbed === "function") {
+            CredlyBadge.autoEmbed();
+        }
+    });
 </script>
 
-    <div class="section-1">
-        <i class="fa fa-terminal fa-5x white"></i>
-        <h2 class="h2-name">Timm Wirtz</h2>
-        <p>Muenster, Germany.</p>
-        <a href="https://github.com/tmwProjects" class="icon-link" target="_blank">
-            <i class="fab fa-github"></i>
-        </a>
-        <a href="https://de.linkedin.com/in/timm-wirtz?trk=profile-badge" class="icon-link" target="_blank">
-            <i class="fa-brands fa-linkedin"></i>
-        </a>
-        <a href="https://www.credly.com/users/timm-wirtz" class="icon-link" target="_blank">
-            <i class="fa-solid fa-certificate"></i>
-        </a>
-        <div class="line"></div>
-        <h2>About</h2>
-        <p class="about-text">
-            Welcome! My name is Timm, and I am a dedicated IT researcher and passionate programmer. I am deeply engaged
-            with open-source projects and the collaborative sharing of knowledge to drive innovations that shape a better
-            future. Inspired by Hermann Hesse's profound insights into human nature, I strive to uncover hidden patterns
-            in seemingly unrelated data, revealing new perspectives and deeper understanding. Effective communication
-            and strategic thinking are essential to me—skills I continuously refine through chess, as well as through
-            the physical and mental challenges of martial arts and bouldering. My relentless curiosity drives me to
-            explore beyond the surface—whether in the complex world of data or in savoring the simple joys of life,
-            like a piece of "Bienenstich".<br><br>
-
-            <span style="color: #ffffff;">Hint:</span> Have fun finding the Easteregg.
-        </p>
-        <section id="experience" class="line">
-        <h2>Experience</h2>
-        <ul>
-            <li>Development and maintenance of the Pipeline for Precompiled files export (GEOROC).</li>
-            <li>Development and maintenance of DIGIS GEOROC 2.0 API Jupyter Notebook to facilitate data access.</li>
-            <li>Working with social media to increase the reach of the GEOROC database.</li>
-            <li>Private Open Source Projects</li>
-            <li>Development and maintenance of a Database for pharmacy-only and prescription products (MUVIA)</li>
-            <li>Semi-automated financial report creation for households</li>
-        </ul>
-        </section>
-        <h2>Skills</h2>
-        <h3>Technologies</h3>
-        <ul class="skill-list">
-            <li>
-                <i class="fab fa-python skill-icon"></i>
-                <span class="skill-name">Python</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 74%;"></div>
-                </div>
-            </li>
-            <li>
-                <i class="fa-brands fa-r-project skill-icon" style="color: #ffffff"></i>
-                <span class="skill-name">R</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 20%;"></div>
-                </div>
-            </li>
-            <li>
-                <i class="fab fa-linux skill-icon"></i>
-                <span class="skill-name">Linux</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 70%;"></div>
-                </div>
-            </li>
-            <li>
-                <i class="fab fa-windows skill-icon"></i>
-                <span class="skill-name">Windows</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 50%;"></div>
-                </div>
-            </li>
-            <li>
-                <i class="fa fa-terminal skill-icon"></i>
-                <span class="skill-name">Bash/Zsh</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 70%;"></div>
-                </div>
-            </li>
-            <li>
-                <i class="fa-solid fa-database skill-icon"></i>
-                <span class="skill-name">SQL</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 32%;"></div>
-                </div>
-            </li>
-            <li>
-                <i class="fab fa-docker skill-icon"></i>
-                <span class="skill-name">Docker</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 15%;"></div>
-                </div>
-            </li>
-        </ul>
-        <h3 class="section-header">Frameworks</h3>
-        <div class="grid">
-            <div class="item">
-                <i class="fa-solid fa-star skill-icon"></i>
-                <span class="skill-name">Apache Spark</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-sailboat skill-icon"></i>
-                <span class="skill-name">Streamlit</span>
-            </div>
-        </div>
-        <h3 class="section-header">Libraries</h3>
-        <div class="grid">
-            <div class="item">
-                <i class="fa-solid fa-terminal skill-icon"></i>
-                <span class="skill-name">Argparse</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-download skill-icon"></i>
-                <span class="skill-name">BeautifulSoup</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-chart-pie skill-icon"></i>
-                <span class="skill-name">Matplotlib</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-cube skill-icon"></i>
-                <span class="skill-name">Numpy</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-table-columns skill-icon"></i>
-                <span class="skill-name">Pandas</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-paw skill-icon"></i>
-                <span class="skill-name">Polars</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-star skill-icon skill-icon"></i>
-                <span class="skill-name">PySpark</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-chart-area skill-icon"></i>
-                <span class="skill-name">Seaborn</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-microscope skill-icon"></i>
-                <span class="skill-name">SciPy</span>
-            </div>
-        </div>
-        <h3 class="section-header">Tools</h3>
-        <div class="grid">
-            <div class="item">
-                <i class="fa-regular fa-file-excel skill-icon"></i>
-                <span class="skill-name">Calc/Excel</span>
-            </div>
-            <div class="item">
-                <i class="fa-regular fa-file-powerpoint skill-icon"></i>
-                <span class="skill-name">Impress/PowerPoint</span>
-            </div>
-            <div class="item">
-                <i class="fa-regular fa-file-word skill-icon"></i>
-                <span class="skill-name">Writer/Word</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-robot skill-icon"></i>
-                <span class="skill-name">ArduinoIDE</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-database skill-icon"></i>
-                <span class="skill-name">DBeaver</span>
-            </div>
-            <div class="item">
-                <i class="fa-brands fa-git skill-icon"></i>
-                <span class="skill-name">Git</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-book-open skill-icon"></i>
-                <span class="skill-name">Jupyter</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-n skill-icon"></i>
-                <span class="skill-name">Nano</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-p skill-icon"></i>
-                <span class="skill-name">Pandoc</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-database skill-icon"></i>
-                <span class="skill-name">PGAdmin</span>
-            </div>
-            <div class="item">
-                <i class="fa-brands fa-python skill-icon"></i>
-                <span class="skill-name">PyCharm</span>
-            </div>
-            <div class="item">
-                <i class="fa-brands fa-r-project skill-icon"></i>
-                <span class="skill-name">RStudio</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-infinity skill-icon"></i>
-                <span class="skill-name">Superset</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-box-open skill-icon"></i>
-                <span class="skill-name">VirtualBox</span>
-            </div>
-            <div class="item">
-                <i class="fa-brands fa-windows skill-icon"></i>
-                <span class="skill-name">VSCode</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-diamond skill-icon"></i>
-                <span class="skill-name">Obsidian</span>
-            </div>
-        </div>
-        <h3 class="section-header">Platforms</h3>
-        <div class="grid">
-            <div class="item">
-                <i class="fab fa-github skill-icon"></i>
-                <span class="skill-name">GitHub</span>
-            </div>
-            <div class="item">
-                <i class="fab fa-gitlab skill-icon"></i>
-                <span class="skill-name">GitLab</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-h skill-icon"></i>
-                <span class="skill-name">Hugo</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-book-bookmark skill-icon"></i>
-                <span class="skill-name">MkDocs</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-book skill-icon"></i>
-                <span class="skill-name">ReadTheDocs</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-cloud skill-icon"></i>
-                <span class="skill-name">Nextcloud</span>
-            </div>
-            <div class="item">
-                <i class="fa-brands fa-rocketchat skill-icon"></i>
-                <span class="skill-name">RocketChat</span>
-            </div>
-            <div class="item">
-                <i class="fa-brands fa-slack skill-icon"></i>
-                <span class="skill-name">Slack</span>
-            </div>
-        </div>
-        <h3 class="section-header">DBMS</h3>
-        <div class="grid">
-            <div class="item">
-                <i class="fa-solid fa-leaf skill-icon"></i>
-                <span class="skill-name">MongoDB</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-eye skill-icon"></i>
-                <span class="skill-name">Apache Cassandra</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-feather-pointed skill-icon"></i>
-                <span class="skill-name">SQLite</span>
-            </div>
-        </div>
-        <h3 class="section-header">Markup Languages</h3>
-        <div class="grid">
-            <div class="item">
-                <i class="fa-solid fa-superscript skill-icon"></i>
-                <span class="skill-name">LaTeX</span>
-            </div>
-            <div class="item">
-                <i class="fab fa-markdown skill-icon"></i>
-                <span class="skill-name">Markdown</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-r skill-icon"></i>
-                <span class="skill-name">RMarkdown</span>
-            </div>
-        </div>
-        <h3 class="section-header">Abilities</h3>
-        <div class="abilities-grid">
-            <div class="item">
-                <i class="fa-solid fa-magnifying-glass-chart skill-icon"></i>
-                <span class="skill-name">Data Analysis</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-soap skill-icon"></i>
-                <span class="skill-name">Data Cleaning</span>
-            </div>
-            <div class="item">
-                <i class="fa-regular fa-eye skill-icon"></i>
-                <span class="skill-name">Data Visualization</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-gears skill-icon"></i>
-                <span class="skill-name">Data processing</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-terminal skill-icon"></i>
-                <span class="skill-name">Command lines tools</span>
-            </div>
-            <div class="item">
-                <i class="fa-solid fa-book skill-icon"></i>
-                <span class="skill-name">Documentation</span>
-            </div>
-        </div>
-        <h2 class="section-header">Projects</h2>
-        <ul class="project-list">
-            <li>
-                <a href="https://tmwprojects.github.io/Blog/" class="project-link" target="_blank">
-                    <div>HackSide $</div>
-                    <span class="role">(Owner/Public)</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://github.com/tmwProjects/tmwProjects.github.io" class="project-link" target="_blank">
-                    <div>Portfolio site</div>
-                    <span class="role">(Owner/Public)</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://github.com/tmwProjects/GeoRoc_CLI" class="project-link" target="_blank">
-                    <div>GEOROC 2.0 CLI</div>
-                    <span class="role">(Owner/Public)</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="project-link" target="_blank">
-                    <div>Pipeline for Precompiled files export (GEOROC)</div>
-                    <span class="role">(Maintainer/Privat)</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://github.com/tmwProjects/Georoc_jupyter" class="project-link" target="_blank">
-                    <div>DIGIS GEOROC 2.0 API Jupyter Notebook</div>
-                    <span class="role">(Maintainer/Public)</span>
-                </a>
-            </li>
-        </ul>
-
-        <h2 class="section-header">Certificates</h2>
-        <div class="certificate-grid">
-        <div class="certificate-item">
-        <div style="background-color: white; width: 370px; height: 260px; padding: 10px; border-radius: 8px; box-sizing: border-box;">
-        <div data-iframe-width="350" data-iframe-height="270" data-share-badge-id="8a6edc5b-0de0-4db7-be02-d27ab1bf6cb1" data-share-badge-host="https://www.credly.com"></div>
-        </div>
-        </div>
-        <div class="certificate-item">
-        <div style="background-color: white; width: 370px; height: 260px; padding: 10px; border-radius: 8px; box-sizing: border-box;">
-        <div data-iframe-width="350" data-iframe-height="270" data-share-badge-id="df87d375-e073-48c6-8707-16b5d8a10bba" data-share-badge-host="https://www.credly.com"></div>
-        </div>
-        </div>
-        <div class="certificate-item">
-        <div style="background-color: white; width: 370px; height: 260px; padding: 10px; border-radius: 8px; box-sizing: border-box;">
-        <div data-iframe-width="350" data-iframe-height="270" data-share-badge-id="ec272bec-81b6-49ee-a582-e18a456e4212" data-share-badge-host="https://www.credly.com"></div>
-        </div>
-        </div>
-        <div class="certificate-item">
-        <div style="background-color: white; width: 370px; height: 260px; padding: 10px; border-radius: 8px; box-sizing: border-box;">
-        <div data-iframe-width="350" data-iframe-height="270" data-share-badge-id="15a6204b-4a78-47ab-bd95-a020124bb32a" data-share-badge-host="https://www.credly.com"></div>
-        </div>
-        </div>
-        </div>
-        <script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-
-
-
-
-        <h2 class="section-header">Contact</h2>
-        <a href="mailto:tmw.contact@protonmail.com" class="icon-link">
-            <i class="fa-solid fa-envelope"></i>
-        </a>
-        <a href="https://datasci.social/@tmwProjects" class="icon-link">
-            <i class="fa-brands fa-mastodon"></i>
-        </a>
-        <a href="https://de.linkedin.com/in/timm-wirtz?trk=profile-badge" class="icon-link" target="_blank">
-            <i class="fa-brands fa-linkedin"></i>
-        </a>
-        <a href="https://tmwprojects.github.io/Blog/" class="icon-link">
-            <i class="fa-solid fa-blog"></i>
-        </a>
-        <div style="margin-top: 50px;"> <!-- Hier wird ein Abstand von 10px nach oben hinzugefügt -->
-            <a href="https://myhits.vercel.app"><img src="https://myhits.vercel.app/api/hit/https%3A%2F%2Ftmwprojects.github.io%2F?color=blue&label=hits&size=small" alt="hits" />
-            </a>
-        <div id="icon-container">
-            <a href="https://c.tenor.com/DFwPhj-PBzYAAAAd/tenor.gif" id="bottom-left-icon" target="_blank">
-                <i class="fa-solid fa-egg"></i>
-            </a>
-        </div>
-
-    <script>
-    window.onscroll = function() {scrollFunction()};
-
-    function scrollFunction() {
-        var scrollPercent = (document.documentElement.scrollTop + document.body.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 100;
-        if (scrollPercent > 96) {
-            document.querySelector("#icon-container").style.display = "block";
-        } else {
-            document.querySelector("#icon-container").style.display = "none";
-        }
-    }
-    </script>
-</body>
+</html>

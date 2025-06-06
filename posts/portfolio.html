@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/455214c00f.js" crossorigin="anonymous"></script>
+    <title>Portfolio - Timm Wirtz</title>
+</head>
+<body>
+
+<div id="progressbar"></div>
+
+<style>
+.hidden {
+    display: none;
+}
+progressbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 10px;
+  background-color: #4caf50;
+  z-index: 99;
+  max-width: 400px;
+}
+
+.section-header {
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.project-link {
+  color: #777;
+  font-size: 18px;
+  transition: color 0.8s ease, transform 0.8s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.project-link:hover {
+  color: #00ff00;
+  transform: scale(1.15); /* sanfte Vergrößerung */
+}
+
+.project-list li {
+  margin: 40px 0;
+}
+
+.icon-link {
+    color: #777;
+    font-size: 40px !important;
+    transition: color 0.5s ease, font-size 0.5s ease;
+}
+
+.icon-link:hover {
+    color: #fff; !important;
+    font-size: 50px !important;
+}
+
+#icon-container {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 100;
+}
+
+.exp-text {
+    text-align: justify;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 80px;
+}
+
+.abilities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+    justify-items: center;
+    align-items: center;
+     margin-bottom: 60px;
+}
+.skill-icon {
+    font-size: 25px;
+    margin-right: 20px;
+    color: #fff; !important
+}
+
+li {
+    margin: 15px 0;
+}
+
+#experience ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+#experience li {
+    text-align: left;
+    position: relative;
+    padding-left: 1.5em;
+    margin-bottom: 20px
+}
+
+
+#experience li::before {
+    content: "\2022";
+    color: white;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+}
+
+.special-item {
+    display: block;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  flex-basis: calc(20% - 15px);
+}
+
+.special-item {
+    display: block !important;
+}
+
+.skill-list {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 80px;
+}
+
+.skill-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+    width: 100%;
+}
+
+.skill-list li::before {
+    color: #7A7C80;
+    margin-right: 20px;
+}
+
+.skill-list li .skill-icon {
+    margin-right: 0px;
+    width: 20px;
+    text-align: center;
+}
+
+.skill-list li .skill-name {
+    margin-right: 20px;
+    margin-left: 12px;
+    width: 80px;
+}
+
+.skill-list li .progress-bar {
+    flex-grow: 1;
+    height: 10px;
+    background-color: #7A7C80;
+}
+
+.skill-list li .progress {
+    height: 100%;
+    background-color: #fff;
+    width: 80%;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.project-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.project-list li {
+    margin-bottom: 10px;
+}
+
+.project-list li:first-child {
+    margin-top: 20px;
+}
+
+.role {
+    font-size: 0.7em;
+}
+
+@media screen and (max-width: 700px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    .section-1 {
+        padding: 20px;
+        padding-top: 5rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+.certificate-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.certificate-item {
+  flex: 1 1 370px;
+  display: flex;
+  justify-content: center;
+}
+</style>
+    <div class="section-1">
+        <section id="experience" class="line">
+        <h2>Experience</h2>
+        <ul>
+            <li>Development and maintenance of the Pipeline for Precompiled files export (GEOROC).</li>
+            <li>Development and maintenance of DIGIS GEOROC 2.0 API Jupyter Notebook to facilitate data access.</li>
+            <li>Working with social media to increase the reach of the GEOROC database.</li>
+            <li>Private Open Source Projects</li>
+            <li>Development and maintenance of a Database for pharmacy-only and prescription products (MUVIA)</li>
+            <li>Semi-automated financial report creation for households</li>
+        </ul>
+        </section>
+        <br>
+        <h2>Skills</h2>
+        <br>
+        <h3>Technologies</h3>
+        <ul class="skill-list">
+            <li>
+                <i class="fab fa-python skill-icon"></i>
+                <span class="skill-name">Python</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 74%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fa-brands fa-r-project skill-icon" style="color: #ffffff"></i>
+                <span class="skill-name">R</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 20%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fab fa-linux skill-icon"></i>
+                <span class="skill-name">Linux</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 70%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fab fa-windows skill-icon"></i>
+                <span class="skill-name">Windows</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 50%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fa fa-terminal skill-icon"></i>
+                <span class="skill-name">Bash/Zsh</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 70%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fa-solid fa-database skill-icon"></i>
+                <span class="skill-name">SQL</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 32%;"></div>
+                </div>
+            </li>
+            <li>
+                <i class="fab fa-docker skill-icon"></i>
+                <span class="skill-name">Docker</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 15%;"></div>
+                </div>
+            </li>
+        </ul>
+        <h3 class="section-header">Frameworks</h3>
+        <div class="grid">
+            <div class="item">
+                <i class="fa-solid fa-star skill-icon"></i>
+                <span class="skill-name">Apache Spark</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-sailboat skill-icon"></i>
+                <span class="skill-name">Streamlit</span>
+            </div>
+        </div>
+        <h3 class="section-header">Libraries</h3>
+        <div class="grid">
+            <div class="item">
+                <i class="fa-solid fa-terminal skill-icon"></i>
+                <span class="skill-name">Argparse</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-download skill-icon"></i>
+                <span class="skill-name">BeautifulSoup</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-chart-pie skill-icon"></i>
+                <span class="skill-name">Matplotlib</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-cube skill-icon"></i>
+                <span class="skill-name">Numpy</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-table-columns skill-icon"></i>
+                <span class="skill-name">Pandas</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-paw skill-icon"></i>
+                <span class="skill-name">Polars</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-star skill-icon skill-icon"></i>
+                <span class="skill-name">PySpark</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-chart-area skill-icon"></i>
+                <span class="skill-name">Seaborn</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-microscope skill-icon"></i>
+                <span class="skill-name">SciPy</span>
+            </div>
+        </div>
+        <h3 class="section-header">Tools</h3>
+        <div class="grid">
+            <div class="item">
+                <i class="fa-regular fa-file-excel skill-icon"></i>
+                <span class="skill-name">Calc/Excel</span>
+            </div>
+            <div class="item">
+                <i class="fa-regular fa-file-powerpoint skill-icon"></i>
+                <span class="skill-name">Impress/PowerPoint</span>
+            </div>
+            <div class="item">
+                <i class="fa-regular fa-file-word skill-icon"></i>
+                <span class="skill-name">Writer/Word</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-robot skill-icon"></i>
+                <span class="skill-name">ArduinoIDE</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-database skill-icon"></i>
+                <span class="skill-name">DBeaver</span>
+            </div>
+            <div class="item">
+                <i class="fa-brands fa-git skill-icon"></i>
+                <span class="skill-name">Git</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-book-open skill-icon"></i>
+                <span class="skill-name">Jupyter</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-n skill-icon"></i>
+                <span class="skill-name">Nano</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-p skill-icon"></i>
+                <span class="skill-name">Pandoc</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-database skill-icon"></i>
+                <span class="skill-name">PGAdmin</span>
+            </div>
+            <div class="item">
+                <i class="fa-brands fa-python skill-icon"></i>
+                <span class="skill-name">PyCharm</span>
+            </div>
+            <div class="item">
+                <i class="fa-brands fa-r-project skill-icon"></i>
+                <span class="skill-name">RStudio</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-infinity skill-icon"></i>
+                <span class="skill-name">Superset</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-box-open skill-icon"></i>
+                <span class="skill-name">VirtualBox</span>
+            </div>
+            <div class="item">
+                <i class="fa-brands fa-windows skill-icon"></i>
+                <span class="skill-name">VSCode</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-diamond skill-icon"></i>
+                <span class="skill-name">Obsidian</span>
+            </div>
+        </div>
+        <h3 class="section-header">Platforms</h3>
+        <div class="grid">
+            <div class="item">
+                <i class="fab fa-github skill-icon"></i>
+                <span class="skill-name">GitHub</span>
+            </div>
+            <div class="item">
+                <i class="fab fa-gitlab skill-icon"></i>
+                <span class="skill-name">GitLab</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-h skill-icon"></i>
+                <span class="skill-name">Hugo</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-book-bookmark skill-icon"></i>
+                <span class="skill-name">MkDocs</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-book skill-icon"></i>
+                <span class="skill-name">ReadTheDocs</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-cloud skill-icon"></i>
+                <span class="skill-name">Nextcloud</span>
+            </div>
+            <div class="item">
+                <i class="fa-brands fa-rocketchat skill-icon"></i>
+                <span class="skill-name">RocketChat</span>
+            </div>
+            <div class="item">
+                <i class="fa-brands fa-slack skill-icon"></i>
+                <span class="skill-name">Slack</span>
+            </div>
+        </div>
+        <h3 class="section-header">DBMS</h3>
+        <div class="grid">
+            <div class="item">
+                <i class="fa-solid fa-leaf skill-icon"></i>
+                <span class="skill-name">MongoDB</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-eye skill-icon"></i>
+                <span class="skill-name">Apache Cassandra</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-feather-pointed skill-icon"></i>
+                <span class="skill-name">SQLite</span>
+            </div>
+        </div>
+        <h3 class="section-header">Markup Languages</h3>
+        <div class="grid">
+            <div class="item">
+                <i class="fa-solid fa-superscript skill-icon"></i>
+                <span class="skill-name">LaTeX</span>
+            </div>
+            <div class="item">
+                <i class="fab fa-markdown skill-icon"></i>
+                <span class="skill-name">Markdown</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-r skill-icon"></i>
+                <span class="skill-name">RMarkdown</span>
+            </div>
+        </div>
+        <h3 class="section-header">Abilities</h3>
+        <div class="abilities-grid">
+            <div class="item">
+                <i class="fa-solid fa-magnifying-glass-chart skill-icon"></i>
+                <span class="skill-name">Data Analysis</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-soap skill-icon"></i>
+                <span class="skill-name">Data Cleaning</span>
+            </div>
+            <div class="item">
+                <i class="fa-regular fa-eye skill-icon"></i>
+                <span class="skill-name">Data Visualization</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-gears skill-icon"></i>
+                <span class="skill-name">Data processing</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-terminal skill-icon"></i>
+                <span class="skill-name">Command lines tools</span>
+            </div>
+            <div class="item">
+                <i class="fa-solid fa-book skill-icon"></i>
+                <span class="skill-name">Documentation</span>
+            </div>
+        </div>
+        <h2 class="section-header">Projects</h2>
+        <ul class="project-list">
+            <li>
+                <a href="https://tmwprojects.github.io/Blog/" class="project-link" target="_blank">
+                    <div>HackSide $</div>
+                    <span class="role">(Owner/Public)</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/tmwProjects/tmwProjects.github.io" class="project-link" target="_blank">
+                    <div>Portfolio site</div>
+                    <span class="role">(Owner/Public)</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/tmwProjects/GeoRoc_CLI" class="project-link" target="_blank">
+                    <div>GEOROC 2.0 CLI</div>
+                    <span class="role">(Owner/Public)</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="project-link" target="_blank">
+                    <div>Pipeline for Precompiled files export (GEOROC)</div>
+                    <span class="role">(Maintainer/Privat)</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/tmwProjects/Georoc_jupyter" class="project-link" target="_blank">
+                    <div>DIGIS GEOROC 2.0 API Jupyter Notebook</div>
+                    <span class="role">(Maintainer/Public)</span>
+                </a>
+            </li>
+        </ul>
+
+        <h2 class="section-header">Certificates</h2>
+        <div class="certificate-grid">
+        <div class="certificate-item">
+        <div style="background-color: white; width: 370px; height: 260px; padding: 10px; border-radius: 8px; box-sizing: border-box;">
+        <div data-iframe-width="350" data-iframe-height="270" data-share-badge-id="8a6edc5b-0de0-4db7-be02-d27ab1bf6cb1" data-share-badge-host="https://www.credly.com"></div>
+        </div>
+        </div>
+        <div class="certificate-item">
+        <div style="background-color: white; width: 370px; height: 260px; padding: 10px; border-radius: 8px; box-sizing: border-box;">
+        <div data-iframe-width="350" data-iframe-height="270" data-share-badge-id="df87d375-e073-48c6-8707-16b5d8a10bba" data-share-badge-host="https://www.credly.com"></div>
+        </div>
+        </div>
+        <div class="certificate-item">
+        <div style="background-color: white; width: 370px; height: 260px; padding: 10px; border-radius: 8px; box-sizing: border-box;">
+        <div data-iframe-width="350" data-iframe-height="270" data-share-badge-id="ec272bec-81b6-49ee-a582-e18a456e4212" data-share-badge-host="https://www.credly.com"></div>
+        </div>
+        </div>
+        <div class="certificate-item">
+        <div style="background-color: white; width: 370px; height: 260px; padding: 10px; border-radius: 8px; box-sizing: border-box;">
+        <div data-iframe-width="350" data-iframe-height="270" data-share-badge-id="15a6204b-4a78-47ab-bd95-a020124bb32a" data-share-badge-host="https://www.credly.com"></div>
+        </div>
+        </div>
+        </div>
+        <br><br><br>
+        <script type="text/javascript" async src="https://cdn.credly.com/assets/utilities/embed.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof CredlyBadge !== "undefined" && typeof CredlyBadge.autoEmbed === "function") {
+            CredlyBadge.autoEmbed();
+        }
+    });
+</script>
+</body>

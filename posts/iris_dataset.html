@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>iris_dataset</title>
+</head>
+<body>
+<h1 id="iris-dataset">Iris Dataset</h1>
+<p>In this post, we explore the Iris dataset, a well-known dataset
+containing information about three Iris species. We start by importing
+necessary Python modules for data analysis. The dataset includes four
+numeric attributes for each species: sepal length, sepal width, petal
+length, and petal width. It contains 150 samples in total and is
+commonly used for classification tasks.</p>
+<p>We check for missing values in the dataset and find that it’s clean,
+with no null entries. We then calculate summary statistics for the
+attributes, providing insights into their distribution.</p>
+<p>To visualize the data, we create boxplots to compare attribute
+distributions across the three Iris species. ANOVA tests confirm
+significant differences in means among the species for all
+attributes.</p>
+<p>A pairplot is generated to visualize relationships between features,
+helping uncover patterns and correlations. A correlation matrix heatmap
+illustrates interdependencies between attributes.</p>
+<p>Lastly, we use PCA to reduce dimensionality and create a 3D plot,
+showcasing how well the Iris species are separated in this reduced
+space. These steps offer a comprehensive exploration of the Iris
+dataset, aiding in data analysis and visualization tasks.</p>
+<p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-6B783D"
+alt="License" /></a></p>
+<hr />
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#">Import modules</a></li>
+<li><a href="#">The iris dataset</a></li>
+<li><a href="#">Data types</a></li>
+<li><a href="#">Null values</a></li>
+<li><a href="#">Common statistical values</a></li>
+<li><a href="#">Boxplots</a></li>
+<li><a href="#">ANOVA (Analysis of Variance)</a></li>
+<li><a href="#">Pairplot</a></li>
+<li><a href="#">Correlationmatrix</a></li>
+<li><a href="#">3D Plot and PCA reduction</a></li>
+<li><a href="#references">References</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<hr />
+<h3 id="import-modules">Import modules</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.mplot3d <span class="im">import</span> Axes3D</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.animation <span class="im">import</span> FuncAnimation, PillowWriter</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="the-iris-dataset">The iris dataset</h3>
+<p>The Iris dataset, by Sir R.A. Fisher, includes 150 samples of three
+Iris species, each with four attributes. It’s key for teaching
+classification algorithms, highlighting linear and non-linear
+separability. With its balanced and comprehensive data, it’s an
+excellent introductory dataset for statistical classification.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iris.DESCR)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Iris</span> plants dataset</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">--------------------</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">**Data</span> Set Characteristics:<span class="pp">**</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">:Number</span> of Instances: 150 <span class="er">(</span><span class="ex">50</span> in each of three classes<span class="kw">)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">:Number</span> of Attributes: 4 numeric, predictive attributes and the class</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">:Attribute</span> Information:</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">-</span> sepal length in cm</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">-</span> sepal width in cm</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">-</span> petal length in cm</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">-</span> petal width in cm</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">-</span> class:</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>            <span class="ex">-</span> Iris-Setosa</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            <span class="ex">-</span> Iris-Versicolour</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>            <span class="ex">-</span> Iris-Virginica</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="ex">:Summary</span> Statistics:</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="ex">==============</span> ==== ==== ======= ===== ====================</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                <span class="ex">Min</span>  Max   Mean    SD   Class Correlation</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="ex">==============</span> ==== ==== ======= ===== ====================</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="ex">sepal</span> length:   4.3  7.9   5.84   0.83    0.7826</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="ex">sepal</span> width:    2.0  4.4   3.05   0.43   <span class="at">-0.4194</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="ex">petal</span> length:   1.0  6.9   3.76   1.76    0.9490  <span class="er">(</span><span class="ex">high!</span><span class="kw">)</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="ex">petal</span> width:    0.1  2.5   1.20   0.76    0.9565  <span class="er">(</span><span class="ex">high!</span><span class="kw">)</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="ex">==============</span> ==== ==== ======= ===== ====================</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="ex">:Missing</span> Attribute Values: None</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="ex">:Class</span> Distribution: 33.3% for each of 3 classes.</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="ex">:Creator:</span> R.A. Fisher</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="ex">:Donor:</span> Michael Marshall <span class="er">(</span><span class="ex">MARSHALL%PLU@io.arc.nasa.gov</span><span class="kw">)</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="ex">:Date:</span> July, 1988</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="ex">The</span> famous Iris database, first used by Sir R.A. Fisher. The dataset is taken</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="ex">from</span> Fisher<span class="st">&#39;s paper. Note that it&#39;</span>s the same as in R, but not as in the UCI</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="ex">Machine</span> Learning Repository, which has two wrong data points.</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="ex">This</span> is perhaps the best known database to be found in the</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="ex">pattern</span> recognition literature.  Fisher<span class="st">&#39;s paper is a classic in the field and</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="st">is referenced frequently to this day.  (See Duda &amp; Hart, for example.)  The</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="st">data set contains 3 classes of 50 instances each, where each class refers to a</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="st">type of iris plant.  One class is linearly separable from the other 2; the</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="st">latter are NOT linearly separable from each other.</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="st">|details-start|</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="st">**References**</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="st">|details-split|</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="st">- Fisher, R.A. &quot;The use of multiple measurements in taxonomic problems&quot;</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="st">  Annual Eugenics, 7, Part II, 179-188 (1936); also in &quot;Contributions to</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="st">  Mathematical Statistics&quot; (John Wiley, NY, 1950).</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="st">- Duda, R.O., &amp; Hart, P.E. (1973) Pattern Classification and Scene Analysis.</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="st">  (Q327.D83) John Wiley &amp; Sons.  ISBN 0-471-22361-1.  See page 218.</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="st">- Dasarathy, B.V. (1980) &quot;Nosing Around the Neighborhood: A New System</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="st">  Structure and Classification Rule for Recognition in Partially Exposed</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="st">  Environments&quot;.  IEEE Transactions on Pattern Analysis and Machine</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="st">  Intelligence, Vol. PAMI-2, No. 1, 67-71.</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="st">- Gates, G.W. (1972) &quot;The Reduced Nearest Neighbor Rule&quot;.  IEEE Transactions</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="st">  on Information Theory, May 1972, 431-433.</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="st">- See also: 1988 MLC Proceedings, 54-64.  Cheeseman et al&quot;s AUTOCLASS II</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="st">  conceptual clustering system finds 3 classes in the data.</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="st">- Many, many more ...</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="st">|details-end|</span></span></code></pre></div>
+<p>This Python code snippet enriches the Iris dataset by adding a
+categorical column for species, converting numerical codes to readable
+species names. The output shows the first five rows, all labeled
+“setosa,” one of the three species in the dataset alongside “versicolor”
+and “virginica.” This approach simplifies data analysis, making the
+dataset immediately more accessible and interpretable for various tasks,
+including machine learning and statistical analysis.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="va">None</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>iris_df[<span class="st">&#39;species&#39;</span>] <span class="op">=</span> pd.Categorical.from_codes(iris.target, iris.target_names)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iris_df.head())</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sepal</span> length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>  <span class="ex">sepal</span> width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>  <span class="ex">petal</span> length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>  <span class="ex">petal</span> width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>  <span class="ex">species</span>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span>             5.1               3.5                1.4               0.2  setosa  </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span>             4.9               3.0                1.4               0.2  setosa  </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span>             4.7               3.2                1.3               0.2  setosa  </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">3</span>             4.6               3.1                1.5               0.2  setosa  </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">4</span>             5.0               3.6                1.4               0.2  setosa  </span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="data-types">Data types</h3>
+<p>This code snippet demonstrates how to load the Iris dataset and
+create a pandas DataFrame from it, naming the columns according to the
+dataset’s feature names: sepal length, sepal width, petal length, and
+petal width, all measured in centimeters. The dtypes method reveals that
+each of these columns is stored as float64 data type, indicating that
+all the measurements are represented as floating-point numbers. This
+data type choice is appropriate for continuous numerical data,
+facilitating various data analysis and machine learning tasks that
+require numerical input.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>iris_df <span class="op">=</span> pd.DataFrame(data<span class="op">=</span>iris.data, columns<span class="op">=</span>iris.feature_names)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iris_df.dtypes)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sepal</span> length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>    <span class="ex">float64</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">sepal</span> width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>     <span class="ex">float64</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">petal</span> length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>    <span class="ex">float64</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">petal</span> width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>     <span class="ex">float64</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">dtype:</span> object</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="null-values">Null values</h3>
+<p>By examining the Iris dataset for missing values, the output
+reassuringly confirms that every column—sepal length, sepal width, petal
+length, petal width, and species—has zero missing entries. This level of
+data integrity simplifies preprocessing steps, allowing for
+straightforward analysis and application in machine learning models, as
+it negates the need for initial data cleaning to address null
+values.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iris_df.isnull().<span class="bu">sum</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sepal</span> length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>    <span class="ex">0</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">sepal</span> width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>     <span class="ex">0</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">petal</span> length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>    <span class="ex">0</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">petal</span> width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>     <span class="ex">0</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">species</span>              0</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">dtype:</span> int64</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="common-statistical-values">Common statistical values</h3>
+<p>Exploring the Iris dataset through its statistical summary provides a
+clear picture of the floral dimensions it encompasses. The average sepal
+length is about 5.84 cm, while the average petal length is notably
+shorter at 3.76 cm, illustrating the variation in flower morphology.
+With sepal widths averaging at 3.06 cm and petal widths at 1.20 cm, the
+dataset captures a detailed snapshot of Iris plant characteristics. The
+range of values, from the shortest petal at 1.0 cm to the longest sepal
+at 7.9 cm, showcases the diverse sizes within the Iris species. This
+summary not only offers a quick glance at the dataset’s features but
+also hints at the intricate patterns that could be explored in
+predictive modeling and data exploration efforts.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>iris_df <span class="op">=</span> pd.DataFrame(iris.data, columns<span class="op">=</span>iris.feature_names)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>iris_df[<span class="st">&#39;species&#39;</span>] <span class="op">=</span> pd.Categorical.from_codes(iris.target, iris.target_names)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iris_df.describe())</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>       <span class="ex">sepal</span> length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>  <span class="ex">sepal</span> width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>  <span class="ex">petal</span> length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>  <span class="ex">petal</span> width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">count</span>         150.000000        150.000000         150.000000        150.000000</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">mean</span>            5.843333          3.057333           3.758000          1.199333</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">std</span>             0.828066          0.435866           1.765298          0.762238</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">min</span>             4.300000          2.000000           1.000000          0.100000</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">25%</span>             5.100000          2.800000           1.600000          0.300000</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="ex">50%</span>             5.800000          3.000000           4.350000          1.300000</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ex">75%</span>             6.400000          3.300000           5.100000          1.800000</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ex">max</span>             7.900000          4.400000           6.900000          2.500000</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="boxplots">Boxplots</h3>
+<p>This Python code block creates a series of boxplots for the Iris
+dataset, visually comparing the distributions of sepal length, sepal
+width, petal length, and petal width across the three Iris species:
+<strong>Setosa</strong>, <strong>Versicolor</strong>, and
+<strong>Virginica</strong>. Using the seaborn library for plotting, each
+feature’s boxplot is categorized by species, with a different color for
+each species from the “Set2” palette for clarity. The
+<strong>dodge=False</strong> parameter ensures the boxplots are aligned
+directly above their corresponding species categories on the x-axis, and
+the <strong>width=0.5</strong> parameter adjusts the boxplots’ width for
+better visualization.</p>
+<p>By iterating over the feature names and creating a subplot for each,
+the code neatly organizes the visual comparison into a 2x2 grid, making
+it easy to observe differences between species for each measured
+attribute. The titles are dynamically set to reflect the feature being
+plotted, enhancing readability.</p>
+<p>Finally, the use of <strong>plt.tight_layout()</strong> adjusts the
+spacing between plots to prevent overlap, ensuring that each plot and
+its title are clearly visible. The resulting figure is then saved as
+“boxplots_iris.png”, providing a useful visual reference that can aid in
+understanding species differences based on morphological measurements
+within the Iris dataset.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">10</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, feature <span class="kw">in</span> <span class="bu">enumerate</span>(iris.feature_names):</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">2</span>, <span class="dv">2</span>, i<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    sns.boxplot(x<span class="op">=</span><span class="st">&#39;species&#39;</span>, y<span class="op">=</span>feature, hue<span class="op">=</span><span class="st">&#39;species&#39;</span>, data<span class="op">=</span>iris_df, palette<span class="op">=</span><span class="st">&quot;Set2&quot;</span>, dodge<span class="op">=</span><span class="va">False</span>, width<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f&#39;Boxplot für </span><span class="sc">{</span>feature<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">&quot;boxplots_iris.png&quot;</span>)</span></code></pre></div>
+<figure>
+<img
+src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/boxplots_iris.png?raw=true"
+alt="Boxplots" />
+<figcaption aria-hidden="true">Boxplots</figcaption>
+</figure>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="anova-analysis-of-variance">ANOVA (Analysis of Variance)</h3>
+<p>Now we perform an <strong>ANOVA (Analysis of Variance)</strong> test
+on the Iris dataset to compare the means of sepal length, sepal width,
+petal length, and petal width across the three Iris species: setosa,
+versicolor, and virginica. ANOVA is used to determine if there are any
+statistically significant differences between the means of three or more
+independent groups.</p>
+<p>The results show a high <strong>F-value</strong> and a very small
+<strong>p-value</strong> for each feature, indicating strong statistical
+evidence that at least one species mean is different from the others for
+each of the four features measured. Specifically:</p>
+<p>For sepal length, the F-value is about <strong>119.26</strong> with a
+p-value near <strong>zero (1.67e-31)</strong>, suggesting significant
+differences in sepal length among the three species. Sepal width also
+shows significant differences, with an <strong>F-value</strong> of
+<strong>49.16</strong> and a <strong>p-value</strong> of
+<strong>4.49e-17</strong>. Petal length and petal width present even
+more pronounced differences, with <strong>F-values</strong> of
+<strong>1180.16</strong> and <strong>960.01</strong>, respectively, and
+<strong>p-values</strong> essentially <strong>zero</strong> (2.86e-91
+for petal length and 4.17e-85 for petal width). These findings
+underscore the morphological diversity among Iris setosa, versicolor,
+and virginica, reinforcing the suitability of these features for species
+classification tasks. The very low p-values across all features confirm
+that the differences in means are not due to random chance, highlighting
+the distinctiveness of each species in terms of their floral
+measurements.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> feature <span class="kw">in</span> iris.feature_names:</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    setosa <span class="op">=</span> iris_df[iris_df[<span class="st">&#39;species&#39;</span>] <span class="op">==</span> <span class="st">&#39;setosa&#39;</span>][feature]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    versicolor <span class="op">=</span> iris_df[iris_df[<span class="st">&#39;species&#39;</span>] <span class="op">==</span> <span class="st">&#39;versicolor&#39;</span>][feature]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    virginica <span class="op">=</span> iris_df[iris_df[<span class="st">&#39;species&#39;</span>] <span class="op">==</span> <span class="st">&#39;virginica&#39;</span>][feature]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    f_value, p_value <span class="op">=</span> stats.f_oneway(setosa, versicolor, virginica)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;ANOVA für </span><span class="sc">{</span>feature<span class="sc">}</span><span class="ss">: F-Wert = </span><span class="sc">{</span>f_value<span class="sc">}</span><span class="ss">, p-Wert = </span><span class="sc">{</span>p_value<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ANOVA</span> for sepal length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span><span class="bu">:</span>       F-Wert = 119.26450218450468,       p-Wert = 1.6696691907693826e-31</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ANOVA</span> for sepal width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span><span class="bu">:</span>        F-Wert = 49.160040089612075,       p-Wert = 4.492017133309115e-17</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ANOVA</span> for petal length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span><span class="bu">:</span>       F-Wert = 1180.161182252981,        p-Wert = 2.8567766109615584e-91</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ANOVA</span> for petal width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span><span class="bu">:</span>        F-Wert = 960.007146801809,         p-Wert = 4.169445839443116e-85</span></code></pre></div>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="pairplot">Pairplot</h3>
+<p>Creating a pairplot of the Iris dataset unfolds a visual narrative
+that deeply explores the interplay between the dataset’s features. By
+converting the species into categorical labels and mapping these
+alongside the Iris measurements, we illuminate the nuanced distinctions
+and patterns among the species. This visualization technique, adeptly
+applied through seaborn, leverages hues and marker shapes to
+differentiate between Iris-Setosa, Iris-Versicolor, and Iris-Virginica,
+offering a canvas where the intricate dance of data points tells the
+story of biological diversity.</p>
+<p>This crafted visual, saved as “pairplot.png”, does more than merely
+depict data; it invites us into a dialogue with the dataset, revealing
+clusters and correlations that might not be immediately apparent. It
+showcases how the dimensions of sepal and petal measurements intersect
+across species, serving as a foundational tool for both exploratory data
+analysis and the preliminary assessment of features for classification
+tasks. Through this lens, the Iris dataset is not just a collection of
+numbers but a testament to the power of statistical visualization in
+uncovering the hidden patterns that reside within.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>iris_df <span class="op">=</span> pd.DataFrame(iris.data, columns<span class="op">=</span>iris.feature_names)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>iris_df[<span class="st">&#39;species&#39;</span>] <span class="op">=</span> pd.Categorical.from_codes(iris.target, iris.target_names)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>sns.pairplot(iris_df, hue<span class="op">=</span><span class="st">&#39;species&#39;</span>, markers<span class="op">=</span>[<span class="st">&quot;o&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;D&quot;</span>],</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>             plot_kws<span class="op">=</span>{<span class="st">&#39;s&#39;</span>: <span class="dv">15</span>})</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">&quot;pairplot.png&quot;</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<figure>
+<img
+src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/pairplot.png?raw=true"
+alt="pairplot_seaborn" />
+<figcaption aria-hidden="true">pairplot_seaborn</figcaption>
+</figure>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="correlationmatrix">Correlationmatrix</h3>
+<p>Now we carry out a correlation analysis on the numerical
+characteristics of the data set. The resulting correlation matrix is
+like a map of the relationships between the characteristics. Positive
+values on this map indicate positive correlations, while negative values
+indicate negative relationships. These numbers are the key to uncovering
+the hidden patterns in our data. The correlation matrix shows us how
+strongly the characteristics are interdependent.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>numeric_data <span class="op">=</span> iris_df.select_dtypes(include<span class="op">=</span>[np.number])</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Correlationmatrix (all values):&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="va">None</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_rows&#39;</span>, <span class="va">None</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numeric_data.corr())</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Correlationmatrix</span> <span class="er">(</span><span class="ex">all</span> values<span class="kw">)</span><span class="bu">:</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">+-------------------+-------------------+-------------------+-------------------+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">sepal</span> length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span> <span class="kw">|</span> <span class="ex">sepal</span> width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>  <span class="kw">|</span> <span class="ex">petal</span> length <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span> <span class="kw">|</span> <span class="ex">petal</span> width <span class="er">(</span><span class="ex">cm</span><span class="kw">)</span>  <span class="kw">|</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">-------------------+-------------------+-------------------+-------------------</span><span class="kw">|</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">1.000000</span>          <span class="kw">|</span> <span class="ex">-0.117570</span>         <span class="kw">|</span> <span class="ex">0.871754</span>          <span class="kw">|</span> <span class="ex">0.817941</span>          <span class="kw">|</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">-0.117570</span>         <span class="kw">|</span> <span class="ex">1.000000</span>          <span class="kw">|</span> <span class="ex">-0.428440</span>         <span class="kw">|</span> <span class="ex">-0.366126</span>         <span class="kw">|</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">0.871754</span>          <span class="kw">|</span> <span class="ex">-0.428440</span>         <span class="kw">|</span> <span class="ex">1.000000</span>          <span class="kw">|</span> <span class="ex">0.962865</span>          <span class="kw">|</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">0.817941</span>          <span class="kw">|</span> <span class="ex">-0.366126</span>         <span class="kw">|</span> <span class="ex">0.962865</span>          <span class="kw">|</span> <span class="ex">1.000000</span>          <span class="kw">|</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="ex">+-------------------+-------------------+-------------------+-------------------+</span></span></code></pre></div>
+<p>Now let’s look at the generated heatmap, which displays these
+correlation values in a visually appealing form. In the world of data
+visualisation, the heat map is like a vivid painting that shows us the
+patterns and connections between the features.</p>
+<p>The heatmap clearly shows that sepal length and petal length have a
+strong positive correlation. This means that longer sepals tend to have
+longer petals. There is also a strong positive correlation between petal
+length and petal width. These findings are valuable to better understand
+the data structure and can help in the selection of features for
+analyses or classification tasks.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sns.heatmap(numeric_data.corr(), annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">&#39;coolwarm&#39;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&#39;Korrelationsmatrix&#39;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">&quot;correlation_matrix_iris.png&quot;</span>)</span></code></pre></div>
+<figure>
+<img
+src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/correlation_matrix_iris.png?raw=true"
+alt="correlationmatrix" />
+<figcaption aria-hidden="true">correlationmatrix</figcaption>
+</figure>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="d-plot-and-pca-reduction">3D Plot and PCA reduction</h3>
+<p>In this code, we try to visualise the relationships between the
+characteristics of the iris flowers in a three-dimensional space.</p>
+<p>Here is a step-by-step explanation:</p>
+<p>First, the data is loaded and split into a <strong>feature matrix
+(X)</strong> and the corresponding <strong>target variables
+(y)</strong>. This makes it possible to analyse the characteristics of
+the iris flowers and understand their relationships.</p>
+<p><strong>Principal component analysis (PCA)</strong> is applied to
+reduce the dimensionality of the data to three principal components.
+This is important to be able to visualise the data in a
+three-dimensional space while retaining the essential information.</p>
+<p>The mean values of the PCA components for each species (Setosa,
+Versicolor, Virginica) are calculated. These mean values represent the
+centres of gravity of the data points of each species in
+three-dimensional space.</p>
+<p>The actual 3D data visualisation then takes place. Each iris species
+is displayed in its own colour (<strong>blue</strong> for Setosa,
+<strong>green</strong> for Versicolor, <strong>red</strong> for
+Virginica). The data points of each species are placed in 3D space.</p>
+<p>To clarify the separation between the species, two layers are added,
+one in purple and one in orange. These planes are based on the
+calculated mean values of the PCA components and help to better
+understand the spatial distribution of the species.</p>
+<p>The interpretation of the data in the plot shows how well the
+different iris species are separated from each other in
+three-dimensional space using the PCA components. The clear separation
+of the species in this space illustrates that PCA is an effective method
+for reducing the dimensions and provides important information about the
+data structure.</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Iris dataset using the load_iris function</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> iris.data  <span class="co"># Extract features from the dataset</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> iris.target  <span class="co"># Extract target labels from the dataset</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply PCA (Principal Component Analysis) to reduce the data to 3 dimensions</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>X_reduced <span class="op">=</span> pca.fit_transform(X)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the means of PCA components for each species in the dataset</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>means <span class="op">=</span> [np.mean(X_reduced[y <span class="op">==</span> species, :], axis<span class="op">=</span><span class="dv">0</span>) <span class="cf">for</span> species <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)]</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a 3D plot to visualize the reduced data</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">7</span>))</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>, projection<span class="op">=</span><span class="st">&#39;3d&#39;</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot each species separately with distinct colors</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">&#39;blue&#39;</span>, <span class="st">&#39;green&#39;</span>, <span class="st">&#39;red&#39;</span>]</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [<span class="st">&#39;Setosa&#39;</span>, <span class="st">&#39;Versicolor&#39;</span>, <span class="st">&#39;Virginica&#39;</span>]</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> species <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> y <span class="op">==</span> species</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    ax.scatter(X_reduced[idx, <span class="dv">0</span>], X_reduced[idx, <span class="dv">1</span>], X_reduced[idx, <span class="dv">2</span>], c<span class="op">=</span>colors[species], label<span class="op">=</span>labels[species])</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Add planes to separate the species</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>z_range <span class="op">=</span> np.linspace(ax.get_zlim()[<span class="dv">0</span>], ax.get_zlim()[<span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>y_range <span class="op">=</span> np.linspace(ax.get_ylim()[<span class="dv">0</span>], ax.get_ylim()[<span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>z_grid, y_grid <span class="op">=</span> np.meshgrid(z_range, y_range)</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the midpoint between Setosa and Versicolor</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>midpoint_sv <span class="op">=</span> (means[<span class="dv">0</span>] <span class="op">+</span> means[<span class="dv">1</span>]) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the midpoint between Versicolor and Virginica</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>midpoint_vv <span class="op">=</span> (means[<span class="dv">1</span>] <span class="op">+</span> means[<span class="dv">2</span>]) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Add planes to visualize the separation between species</span></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>ax.plot_surface(np.full(z_grid.shape, midpoint_sv[<span class="dv">0</span>]), y_grid, z_grid, alpha<span class="op">=</span><span class="fl">0.2</span>, color<span class="op">=</span><span class="st">&#39;purple&#39;</span>)</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>ax.plot_surface(np.full(z_grid.shape, midpoint_vv[<span class="dv">0</span>]), y_grid, z_grid, alpha<span class="op">=</span><span class="fl">0.2</span>, color<span class="op">=</span><span class="st">&#39;orange&#39;</span>)</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Set labels for the three PCA dimensions</span></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">&#39;PC1&#39;</span>)</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">&#39;PC2&#39;</span>)</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>ax.set_zlabel(<span class="st">&#39;PC3&#39;</span>)</span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&#39;Iris dataset reduced to 3 dimensions with PCA&#39;</span>)</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Animation function for rotating the 3D plot</span></span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update(num, ax, X_reduced):</span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>    ax.view_init(azim<span class="op">=</span>num)</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the animation by rotating the 3D plot</span></span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a>ani <span class="op">=</span> FuncAnimation(fig, update, frames<span class="op">=</span><span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">360</span>, <span class="dv">1</span>), fargs<span class="op">=</span>(ax, X_reduced), interval<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the animation as a GIF file</span></span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a>ani.save(<span class="st">&#39;iris_pca_rotation.gif&#39;</span>, writer<span class="op">=</span>PillowWriter(fps<span class="op">=</span><span class="dv">20</span>))</span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a>plt.show()  <span class="co"># Display the 3D plot and animation</span></span></code></pre></div>
+<figure>
+<img
+src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/iris_pca_rotation.gif?raw=true"
+alt="3D-Plot" />
+<figcaption aria-hidden="true">3D-Plot</figcaption>
+</figure>
+<p><strong>PC1</strong>, the first principal component, captures the
+most significant variance in the data. A positive value of PC1 suggests
+that sepal length, sepal width, petal length, and petal width all
+increase together. This means that flowers with larger sepals and petals
+tend to have a positive PC1 score, while those with smaller sepals and
+petals have a negative score.</p>
+<p><strong>PC2</strong>, the second principal component, represents
+variance orthogonal to PC1. A positive PC2 value indicates that petal
+length and petal width increase together, while sepal length and sepal
+width vary in opposite directions. Conversely, a negative PC2 value
+suggests that sepal length and sepal width increase together, while
+petal length and petal width vary oppositely.</p>
+<p><strong>PC3</strong>, the third principal component, captures
+additional variance not explained by PC1 and PC2. A positive PC3 score
+indicates that sepal width and petal length increase simultaneously,
+while sepal length and petal width vary oppositely. On the other hand, a
+negative PC3 score implies that sepal length and petal width increase
+together, while sepal width and petal length vary in opposite
+directions.</p>
+<p>Interpreting these principal components helps us understand the
+underlying relationships between the Iris dataset’s features. It can aid
+in feature selection for analysis and classification tasks and provides
+insights into the structural diversity of Iris flowers.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h2 id="references">References</h2>
+<p>[1] <strong>NumPy</strong> - Harris, C.R., Millman, K.J., van der
+Walt, S.J. et al. (2020). Array programming with NumPy. Nature,
+585(7825), 357-362. https://doi.org/10.1038/s41586-020-2649-2</p>
+<p>[2] <strong>Pandas</strong> - McKinney, W. (2010). Data Structures
+for Statistical Computing in Python. Proceedings of the 9th Python in
+Science Conference, 51-56.
+https://doi.org/10.25080/Majora-92bf1922-00a</p>
+<p>[3] <strong>Seaborn</strong> - Waskom, M. (2021). seaborn:
+statistical data visualization. Journal of Open Source Software, 6(60),
+3021. https://doi.org/10.21105/joss.03021</p>
+<p>[4] <strong>SciPy</strong> - Virtanen, P., Gommers, R., Oliphant,
+T.E. et al. (2020). SciPy 1.0: fundamental algorithms for scientific
+computing in Python. Nature Methods, 17(3), 261-272.
+https://doi.org/10.1038/s41592-019-0686-2</p>
+<p>[5] <strong>Matplotlib</strong> - Hunter, J.D. (2007). Matplotlib: A
+2D Graphics Environment. Computing in Science &amp; Engineering, 9(3),
+90-95. https://doi.org/10.1109/MCSE.2007.55</p>
+<p>[6] <strong>scikit-learn (load_iris)</strong> - Pedregosa, F.,
+Varoquaux, G., Gramfort, A. et al. (2011). Scikit-learn: Machine
+Learning in Python. Journal of Machine Learning Research, 12, 2825-2830.
+http://www.jmlr.org/papers/volume12/pedregosa11a/pedregosa11a.pdf</p>
+<p>[7] <strong>scikit-learn (PCA)</strong> - Jolliffe, I.T. (2002).
+Principal Component Analysis. Wiley Online Library.
+https://onlinelibrary.wiley.com/doi/book/10.1002/9781118445112</p>
+<p>[8] <strong>mpl_toolkits.mplot3d</strong> - Matplotlib Development
+Team. (2021). mplot3d Toolkit. Matplotlib Documentation.
+https://matplotlib.org/stable/mpl_toolkits/mplot3d/index.html</p>
+<p>[9] <strong>matplotlib.animation</strong> - Matplotlib Development
+Team. (2021). Animations with Matplotlib. Matplotlib Documentation.
+https://matplotlib.org/stable/gallery/animation/index.html</p>
+<p>[10] <strong>matplotlib.animation.PillowWriter</strong> - Matplotlib
+Development Team. (2021). Pillow (Python Imaging Library, PIL Fork).
+Pillow Documentation.
+https://pillow.readthedocs.io/en/stable/index.html</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+<hr />
+<h3 id="license">License</h3>
+<p><strong>CC BY-NC-SA 4.0 Licence</strong></p>
+<p>With this licence, you may use, modify and share the work as long as
+you credit the original author. However, you may not use it for
+commercial purposes, i.e. you may not make money from it. And if you
+make changes and share the new work, it must be shared under the same
+conditions.</p>
+<p><a href="#contents"><strong>Back to content</strong></a></p>
+</body>
+</html>
