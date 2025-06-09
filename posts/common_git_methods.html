@@ -36,10 +36,6 @@ href="https://git-scm.com/doc" title="Git Docs">Docs</a> of Git can be
 used. For the workflow, an initial exposure to Git is extremely helpful,
 allowing the work processes to be understood concretely. are
 understood.</p>
-<h6
-id="hint-currently-this-repository-refers-to-working-with-git-on-a-local-level-only.-more-and-working-with-remote-repositories-will-follow.">Hint:
-Currently, this repository refers to working with Git on a local level
-only. More and working with remote repositories will follow.</h6>
 <p><br></p>
 <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
 src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-6B783D"
@@ -151,7 +147,7 @@ our own computer and nothing will be put online.</p>
 <p><a href="#contents"><strong>Back to content</strong></a></p>
 <h3 id="git-add---bridge-between-working-directory-and-staging-area">git
 add - Bridge between working directory and staging area</h3>
-<p>With a <strong>commit</strong>, the state of a project is saved at
+<p>With a <strong>commit</strong>, the state of a projechttps://github.com/tmwProjects/Blog/blob/master/content/t is saved at
 the corresponding time where the command was listed. Here, a commit
 corresponds to a version of the project, so to speak.</p>
 <p>It is important to understand here that with a commit, the state of a
@@ -173,7 +169,7 @@ this, we would have to execute the git add command again.</p>
 <p>Here it can be helpful to imagine several working levels:</p>
 <figure>
 <img
-src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/gitstations.jpg?raw=true"
+src="grafics/gitstations.jpg"
 alt="stations" />
 <figcaption aria-hidden="true">stations</figcaption>
 </figure>
@@ -184,7 +180,7 @@ commit - Bridge between staging area and repository</h3>
 staging area, we should switch to storing the current version in our
 repository from our staging area. This can be done by using the
 following command in the terminal:</p>
-<pre><code>git commit -m "message"</code></pre>
+<pre><code>git commit -m "message"</code></pre>https://github.com/tmwProjects/Blog/blob/master/content/
 <p>This command creates a new commit from all the staged changes. When
 committing, it is necessary to store a commit message. For a better
 overview, it is helpful to store in the commit message what was
@@ -313,7 +309,7 @@ with.</p>
 <p>or</p>
 <pre><code>git diff HEAD~1 HEAD</code></pre>
 <p>Another important parameter for the command is <strong>-p</strong>.
-This displays significantly more information for the commits, such as
+This displays significantly more information for the comhttps://github.com/tmwProjects/Blog/blob/master/content/mits, such as
 which lines within the code specifically added or removed. If the commit
 needs to be displayed in less detail, the following parameter can be
 used:</p>
@@ -414,7 +410,7 @@ the repository with the corresponding commits are returned to the
 working directory after the above command.</p>
 <figure>
 <img
-src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/gitreset.jpg?raw=true"
+src="grafics/gitreset.jpg"
 alt="reset" />
 <figcaption aria-hidden="true">reset</figcaption>
 </figure>
@@ -533,12 +529,12 @@ history from being truncated, which is important for the integrity of
 your commit history and for reliable collaboration.</p>
 <p>When the command is executed, a commit is created as described, which
 must also contain a corresponding commit message. In this particular
-case, this commit message is generated automatically. This makes sense
+case, this commit message is generated auhttps://github.com/tmwProjects/Blog/blob/master/content/tomatically. This makes sense
 in so far as it may not even be marked in the repository history that
 this is a revert.</p>
 <figure>
 <img
-src="https://github.com/tmwProjects/Blog/blob/master/content/grafics/gitrevert.jpg?raw=true"
+src="grafics/gitrevert.jpg"
 alt="revert" />
 <figcaption aria-hidden="true">revert</figcaption>
 </figure>
