@@ -30,7 +30,7 @@
     }
 
     .profile {
-      width: 20%;
+      width: 25%;
       background-color: #000;
       padding: 20px;
     }
@@ -208,11 +208,11 @@
       width: 100%;
       background-color: #111;
       padding: 8px 12px;
-      height: 35px;
+      height: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 12px;
+      gap: 15px;
       z-index: 1000;
       border-top: 2px solid #444;
     }
@@ -223,7 +223,7 @@
     }
 
     .bottom-bar a:hover img {
-      transform: scale(1.05);
+      transform: scale(1.15);
     }
 
 
@@ -251,11 +251,11 @@
 
     .social-icons {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 40px;
-      margin-top: 30px;
+      flex-wrap: nowrap;
+      gap: 35px;
+      margin-top: 35px;
       text-align: center;
     }
 
@@ -267,14 +267,14 @@
 
     .icon-link {
       color: #777;
-      font-size: 40px;
+      font-size: 42px;
       text-decoration: none;
       transition: color 0.3s ease, transform 0.3s ease;
     }
 
     .icon-link2 {
       color: #777;
-      font-size: 20px;
+      font-size: 24px;
       text-decoration: none;
       transition: color 0.3s ease, transform 0.3s ease;
       align-items: left;
@@ -292,8 +292,7 @@
 
 
     .icon-label {
-      margin-top: 10px;
-      font-size: 14px;
+      font-size: 13px;
       color: #aaa;
     }
 
@@ -320,30 +319,35 @@
             <a href="https://github.com/tmwProjects" class="icon-link2" target="_blank">
               <i class="fab fa-github"></i>
             </a>
+            <span class="icon-label">Github</span>
           </div>
 
           <div class="icon-item">
             <a href="https://datasci.social/@tmwProjects" class="icon-link2" target="_blank">
               <i class="fa-brands fa-mastodon"></i>
             </a>
+            <span class="icon-label">Mastodon</span>
           </div>
 
           <div class="icon-item">
             <a href="https://de.linkedin.com/in/timm-wirtz" class="icon-link2" target="_blank">
               <i class="fa-brands fa-linkedin"></i>
             </a>
+            <span class="icon-label">LinkedIn</span>
           </div>
 
           <div class="icon-item">
             <a href="https://www.credly.com/users/timm-wirtz" class="icon-link2" target="_blank">
               <i class="fa-solid fa-certificate"></i>
             </a>
+            <span class="icon-label">Credly</span>
           </div>
 
           <div class="icon-item">
             <a href="mailto:tmw.contact@protonmail.com" class="icon-link2">
               <i class="fa-solid fa-envelope"></i>
             </a>
+            <span class="icon-label">Mail</span>
           </div>
       </div>
   </div>
@@ -386,7 +390,8 @@
         </div>
       </div>
     </div>
-    <a onclick="showContent('contact')">Contact</a>
+    <a onclick="showContent('privacy')">Privacy</a>
+    <a onclick="showContent('legal')">Legal</a>
   </div>
 
   <div class="section content">
@@ -501,53 +506,137 @@
       fadeContentChange(homeHtml);
     }
 
-    function showContent(id) {
+function showContent(id) {
   if (id === 'portfolio') {
     showPost('portfolio');
-  } else if (id === 'contact') {
+  } else if (id === 'privacy') {
     fadeContentChange(`
       <div class="post-content">
-        <h2>Contact</h2>
-        <div class="social-icons">
-          <div class="icon-item">
-            <a href="https://github.com/tmwProjects" class="icon-link" target="_blank">
-              <i class="fab fa-github"></i>
-            </a>
-            <span class="icon-label">GitHub</span>
-          </div>
+        <h1>Privacy Policy</h1>
+        <p><strong>in accordance with the GDPR/DSGVO</strong></p>
 
-          <div class="icon-item">
-            <a href="https://datasci.social/@tmwProjects" class="icon-link" target="_blank">
-              <i class="fa-brands fa-mastodon"></i>
-            </a>
-            <span class="icon-label">Mastodon</span>
-          </div>
+        <h2>1. Controller</h2>
+        <p>
+          The responsible person for data processing on this website is:<br />
+          <strong>Timm Wirtz</strong><br />
+          Email: <a href="mailto:tmw.contact@protonmail.com">tmw.contact@protonmail.com</a>
+        </p>
 
-          <div class="icon-item">
-            <a href="https://de.linkedin.com/in/timm-wirtz" class="icon-link" target="_blank">
-              <i class="fa-brands fa-linkedin"></i>
-            </a>
-            <span class="icon-label">LinkedIn</span>
-          </div>
+        <h2>2. Hosting</h2>
+        <p>
+          This website is hosted via <strong>GitHub Pages</strong>. Provider:<br />
+          GitHub, Inc.<br />
+          88 Colin P. Kelly Jr. Street<br />
+          San Francisco, CA 94107<br />
+          USA
+        </p>
+        <p>
+          When visiting this site, the following data is automatically stored (server log files):<br />
+          – IP address<br />
+          – Date and time of access<br />
+          – Browser type and version<br />
+          – Operating system<br />
+          – Referrer URL
+        </p>
+        <p>
+          These data are collected solely for technical delivery and security purposes.<br />
+          For more information, see:
+          <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">
+            GitHub Privacy Statement
+          </a>
+        </p>
 
-          <div class="icon-item">
-            <a href="https://www.credly.com/users/timm-wirtz" class="icon-link" target="_blank">
-              <i class="fa-solid fa-certificate"></i>
-            </a>
-            <span class="icon-label">Credly</span>
-          </div>
+        <h2>3. Use of Font Awesome</h2>
+        <p>
+          This site uses <strong>Font Awesome</strong> for icon display. Provider:<br />
+          Fonticons, Inc.<br />
+          6 Porter Road Apartment 3R<br />
+          Cambridge, MA 02140<br />
+          USA
+        </p>
+        <p>
+          Your IP address may be transmitted to Fonticons when loading icons.<br />
+          More information:
+          <a href="https://fontawesome.com/privacy" target="_blank" rel="noopener">
+            Font Awesome Privacy Policy
+          </a>
+        </p>
 
-          <div class="icon-item">
-            <a href="mailto:tmw.contact@protonmail.com" class="icon-link">
-              <i class="fa-solid fa-envelope"></i>
-            </a>
-            <span class="icon-label">E-Mail</span>
-          </div>
-        </div>
+        <h2>4. No Cookies, No Tracking</h2>
+        <p>
+          This website does <strong>not use cookies</strong> and does <strong>not use tracking tools</strong>.
+        </p>
+
+        <h2>5. Your Rights</h2>
+        <p>
+          You have the right to:<br />
+          – Access your data (Art. 15 GDPR)<br />
+          – Rectify inaccurate data (Art. 16 GDPR)<br />
+          – Erasure of your data (Art. 17 GDPR)<br />
+          – Restrict processing (Art. 18 GDPR)<br />
+          – Data portability (Art. 20 GDPR)<br />
+          – Object to processing (Art. 21 GDPR)
+        </p>
+        <p>
+          You can contact me at:<br />
+          <strong>Timm Wirtz</strong> –
+          <a href="mailto:tmw.contact@protonmail.com">tmw.contact@protonmail.com</a>
+        </p>
+
+        <h2>6. Changes to This Privacy Policy</h2>
+        <p>
+          I reserve the right to amend this privacy policy.<br />
+          <em>Last updated: June 11, 2025</em>
+        </p>
+      </div>
+    `);
+  } else if (id === 'legal') {
+    fadeContentChange(`
+      <div class="post-content">
+        <h1>Legal Notice</h1>
+
+        <h2>Information according to § 5 TMG</h2>
+        <p>
+          <strong>Timm Wirtz</strong><br />
+          Email: <a href="mailto:tmw.contact@protonmail.com">tmw.contact@protonmail.com</a><br />
+          (Postal address available upon request)
+        </p>
+        <p>
+          This website serves solely as a personal showcase for IT-related projects. It is not a commercial or business website.
+        </p>
+
+        <h2>Responsible for content according to § 55 Abs. 2 RStV</h2>
+        <p>
+          <strong>Timm Wirtz</strong><br />
+          Email: <a href="mailto:tmw.contact@protonmail.com">tmw.contact@protonmail.com</a>
+        </p>
+
+        <h2>Liability for content</h2>
+        <p>
+          As a service provider, I am responsible for my own content on these pages under general law (§ 7 para.1 TMG).
+          However, I am not obligated to monitor transmitted or stored third-party information.
+        </p>
+
+        <h2>Liability for links</h2>
+        <p>
+          This website contains links to external third-party websites. I have no influence on their content.
+          Therefore, I cannot accept any liability for this external content.
+          If I become aware of any legal violations, I will remove such links immediately.
+        </p>
+
+        <h2>Copyright</h2>
+        <p>
+          The content and works on this site created by the website operator are subject to German copyright law.
+          Contributions by third parties are marked as such.
+          Reproduction, processing, or distribution requires explicit permission.
+        </p>
+
+        <p><em>Last updated: June 11, 2025</em></p>
       </div>
     `);
   }
 }
+
 
   function showPost(postId) {
     const contentArea = document.getElementById('content-area');
