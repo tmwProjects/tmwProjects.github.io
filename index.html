@@ -161,8 +161,9 @@
     }
 
     ul {
-      list-style: none;
+      list-style: disc;
       padding-left: 0;
+      line-height: 1.6;
     }
 
     li {
@@ -360,6 +361,7 @@
     <a onclick="showHome()">Home</a>
     <a onclick="showContent('portfolio')">Portfolio</a>
     <a onclick="toggleSubmenu()">Blog</a>
+    <a onclick="showContent('now')">Now</a>
     <div id="blog-submenu" class="submenu hidden">
       <div class="submenu-year">
         <a onclick="toggleYearSubmenu('year2025')">2025 ▸</a>
@@ -632,6 +634,22 @@ function showContent(id) {
         </p>
 
         <p><em>Last updated: June 11, 2025</em></p>
+      </div>
+    `);
+  } else if (id === 'now') {
+    fadeContentChange(`
+      <div class="post-content">
+        <h1>What I'm Doing Now</h1>
+        <p>Hi there! Here’s what I’m currently focusing on:</p>
+
+        <h2>Learning & Projects</h2>
+        <ul>
+          <li>Diving into <strong>Financial Mathematics</strong> to sharpen analytical skills</li>
+          <li>Preparing for the <strong>Linux Professional Institute LPIC-1</strong> certification</li>
+          <li>Getting familiar with the <strong>Spark framework</strong> for big data processing</li>
+          <li>Building a private computing cluster, including designing a <strong>3D-printed rack</strong> to house the hardware</li>
+        </ul>
+        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExenl5ZDJ6amJoZW1wcGdvY3dxejh6eDdqZGNncWR5anJnY2NzMXMyNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uXEYwlnP7gWyc/giphy.gif" style="max-width:100%; height:auto; margin-bottom:1em; transform: scaleX(-1);" />
       </div>
     `);
   }
