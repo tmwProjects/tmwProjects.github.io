@@ -345,7 +345,7 @@
           </div>
 
           <div class="icon-item">
-            <a href="mailto:tmw.contact@protonmail.com" class="icon-link2">
+            <a href="mailto:tmw.contact@protonmail.com?subject=Web-contact%20Portfolio%20%26%20Blog" class="icon-link2">
               <i class="fa-solid fa-envelope"></i>
             </a>
             <span class="icon-label">Mail</span>
@@ -353,48 +353,60 @@
       </div>
   </div>
 
-  <div class="section nav">
-    <h2>
-      Navigation~$
-      <span class="cursor"></span>
-    </h2>
-    <a onclick="showHome()">Home</a>
-    <a onclick="showContent('portfolio')">Portfolio</a>
-    <a onclick="toggleSubmenu()">Blog</a>
-    <a onclick="showContent('now')">Now</a>
-    <div id="blog-submenu" class="submenu hidden">
-      <div class="submenu-year">
-        <a onclick="toggleYearSubmenu('year2025')">2025 ▸</a>
-        <div id="year2025" class="submenu nested-submenu hidden">
-          <a onclick="showPost('spark_mindmap1')">Apache Spark - Mindmap</a>
-        </div>
-      </div>
-      <div class="submenu-year">
-        <a onclick="toggleYearSubmenu('year2024')">2024 ▸</a>
-        <div id="year2024" class="submenu nested-submenu hidden">
-          <a onclick="showPost('iris_dataset')">Iris Dataset</a>
-        </div>
-      </div>
-      <div class="submenu-year">
-        <a onclick="toggleYearSubmenu('year2023')">2023 ▸</a>
-        <div id="year2023" class="submenu nested-submenu hidden">
-          <a onclick="showPost('hugo_hackside')">Create and deploy a Blog with Hugo</a>
-          <a onclick="showPost('mastodon')">Mastodon and its tools</a>
-          <a onclick="showPost('volatility')">Memory forensics with Volatility</a>
-          <a onclick="showPost('data_cleaning')">Common Data Cleaning methods</a>
-          <a onclick="showPost('project_euler')">Project Euler</a>
-        </div>
-      </div>
-      <div class="submenu-year">
-        <a onclick="toggleYearSubmenu('year2022')">2022 ▸</a>
-        <div id="year2022" class="submenu nested-submenu hidden">
-          <a onclick="showPost('common_git_methods')">Common methods of git</a>
-        </div>
+<div class="section nav">
+  <h2>
+    Navigation~$
+    <span class="cursor"></span>
+  </h2>
+  <a onclick="showHome()">Home</a>
+  <a onclick="showContent('portfolio')">Portfolio</a>
+
+  <!-- Blog + Blog-Submenu -->
+  <a onclick="toggleSubmenu('blog-submenu')">Blog</a>
+  <div id="blog-submenu" class="submenu hidden">
+    <div class="submenu-year">
+      <a onclick="toggleYearSubmenu('year2025')">2025 ▸</a>
+      <div id="year2025" class="submenu nested-submenu hidden">
+        <a onclick="showPost('spark_mindmap1')">Apache Spark - Mindmap</a>
       </div>
     </div>
-    <a onclick="showContent('privacy')">Privacy</a>
-    <a onclick="showContent('legal')">Legal</a>
+    <div class="submenu-year">
+      <a onclick="toggleYearSubmenu('year2024')">2024 ▸</a>
+      <div id="year2024" class="submenu nested-submenu hidden">
+        <a onclick="showPost('iris_dataset')">Iris Dataset</a>
+      </div>
+    </div>
+    <div class="submenu-year">
+      <a onclick="toggleYearSubmenu('year2023')">2023 ▸</a>
+      <div id="year2023" class="submenu nested-submenu hidden">
+        <a onclick="showPost('hugo_hackside')">Create and deploy a Blog with Hugo</a>
+        <a onclick="showPost('mastodon')">Mastodon and its tools</a>
+        <a onclick="showPost('volatility')">Memory forensics with Volatility</a>
+        <a onclick="showPost('data_cleaning')">Common Data Cleaning methods</a>
+        <a onclick="showPost('project_euler')">Project Euler</a>
+      </div>
+    </div>
+    <div class="submenu-year">
+      <a onclick="toggleYearSubmenu('year2022')">2022 ▸</a>
+      <div id="year2022" class="submenu nested-submenu hidden">
+        <a onclick="showPost('common_git_methods')">Common methods of git</a>
+      </div>
+    </div>
   </div>
+
+  <!-- Extras + Extras-Submenu -->
+  <a onclick="toggleSubmenu('extras-submenu')">Extras</a>
+  <div id="extras-submenu" class="submenu hidden">
+    <a onclick="showContent('now')">Now</a>
+    <a onclick="showPost('bookmarks')">Bookmarks</a>
+    <a onclick="showPost('changelog')">Change Log</a>
+  </div>
+
+  <!-- Rest -->
+  <a onclick="showContent('privacy')">Privacy</a>
+  <a onclick="showContent('legal')">Legal</a>
+</div>
+
 
   <div class="section content">
     <div id="content-area">
@@ -442,9 +454,11 @@
   </div>
 
   <script>
-    function toggleSubmenu() {
-      const submenu = document.getElementById('blog-submenu');
-      submenu.classList.toggle('hidden');
+    function toggleSubmenu(id) {
+      const submenu = document.getElementById(id);
+      if (submenu) {
+        submenu.classList.toggle('hidden');
+      }
     }
 
     function toggleYearSubmenu(yearId) {
